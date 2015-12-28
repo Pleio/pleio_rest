@@ -1,0 +1,15 @@
+{
+    "name": "pleio/pleio_rest",
+    "description": "An API REST interface for the Pleio app.",
+    "type": "elgg-plugin",
+    "keywords": ["elgg", "plugin", "rest"],
+    "license": "GPL-2.0",
+    "support": {
+        "source": "https://github.com/Pleio/pleio_rest",
+        "issues": "https://github.com/Pleio/pleio_rest/issues"
+    },
+    "require": {
+        "composer/installers": "^1.0.8",
+        "slim/slim": "3.x-dev"
+    }
+}

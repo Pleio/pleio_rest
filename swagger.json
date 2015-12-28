@@ -1,0 +1,523 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Pleio REST API",
+        "description": "This document describes the Pleio REST API. The results of the API (so the contents) are limited to the site that is requested except for the site calls. When requesting an access token, the same token can be used for all the sites.",
+        "termsOfService": "https://www.pleio.nl",
+        "contact": {
+            "email": "helpdesk@pleio.nl"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/activities/group/{guid}": {
+            "get": {
+                "tags": [
+                    "activities"
+                ],
+                "summary": "Find activities in a specific group.",
+                "description": "Find the most recent activities from a specific group.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "guid",
+                        "in": "path",
+                        "description": "The guid of the specific group",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Offset the results by",
+                        "required": false,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "default": 0
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit the results by",
+                        "required": false,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "default": 20
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesful operation.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Activity"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Could not find the requested group."
+                    }
+                }
+            }
+        },
+        "/api/activities": {
+            "get": {
+                "tags": [
+                    "activities"
+                ],
+                "summary": "Find activities of the whole site.",
+                "description": "Find the most recent activities of the whole site.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Offset the results by",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int64",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "multi",
+                        "default": 0
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit the results by",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int64",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "multi",
+                        "default": 20
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesful operation.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Activity"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/activities/group/{guid}/mark_seen": {
+            "post": {
+                "tags": [
+                    "activities"
+                ],
+                "summary": "Mark the activities in the specific group as seen.",
+                "description": "Mark the activities in the specific group as seen till the most recent activity.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "guid",
+                        "in": "path",
+                        "description": "The guid of the specific group",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesful operation."
+                    },
+                    "404": {
+                        "description": "Could not find the requested group."
+                    }
+                }
+            }
+        },
+        "/api/activities/mark_seen": {
+            "post": {
+                "tags": [
+                    "activities"
+                ],
+                "summary": "Mark the activities as seen.",
+                "description": "Mark the activities as seen till the most recent activity.",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesful operation."
+                    }
+                }
+            }
+        },
+        "/oauth/v2/token": {
+            "post": {
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Request a new access token.",
+                "description": "Request a new access token for the specific user.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "query",
+                        "description": "The username of the specific user.",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "The password of the specific user.",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "client_id",
+                        "in": "query",
+                        "description": "The id of the client application.",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "client_secret",
+                        "in": "query",
+                        "description": "The secret of the client application.",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesful operation."
+                    }
+                }
+            }
+        },
+        "/api/groups/mine": {
+            "get": {
+                "tags": [
+                    "groups"
+                ],
+                "summary": "Retrieve a list of groups the current user is member of.",
+                "description": "Retrieve a list of groups the current user is member of.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Offset the results by",
+                        "required": false,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "default": 0
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit the results by",
+                        "required": false,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "default": 20
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesful operation.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Group"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/groups": {
+            "get": {
+                "tags": [
+                    "groups"
+                ],
+                "summary": "Retrieve a list of all the groups on the site.",
+                "description": "Retrieve a list of all the groups on the site.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Offset the results by",
+                        "required": false,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "default": 0
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit the results by",
+                        "required": false,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "default": 20
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesful operation.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Group"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sites/mine": {
+            "get": {
+                "tags": [
+                    "sites"
+                ],
+                "summary": "Retrieve a list of sites the current user is member of.",
+                "description": "Retrieve a list of sites the current user is member of.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Offset the results by",
+                        "required": false,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "default": 0
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit the results by",
+                        "required": false,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "default": 20
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesful operation.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Site"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sites": {
+            "get": {
+                "tags": [
+                    "sites"
+                ],
+                "summary": "Retrieve a list of all sites.",
+                "description": "Retrieve a list of all sites.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Offset the results by",
+                        "required": false,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "default": 0
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit the results by",
+                        "required": false,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "default": 20
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesful operation.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Site"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api": {
+            "get": {
+                "tags": [
+                    "version"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retrieve API version information."
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Activity": {
+            "required": [
+                "id",
+                "subject"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "subject": {
+                    "type": "string"
+                }
+            }
+        },
+        "Group": {
+            "required": [
+                "guid",
+                "name",
+                "membership"
+            ],
+            "properties": {
+                "guid": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "membership": {
+                    "description": "Can be open or closed.",
+                    "type": "string"
+                },
+                "time_created": {
+                    "type": "string"
+                }
+            }
+        },
+        "Site": {
+            "required": [
+                "guid",
+                "name",
+                "url",
+                "membership"
+            ],
+            "properties": {
+                "guid": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "membership": {
+                    "description": "Can be open or closed.",
+                    "type": "string"
+                },
+                "time_created": {
+                    "description": "In ISO-8601 format.",
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "activities",
+            "description": "Retrieve the latest activities."
+        },
+        {
+            "name": "authentication",
+            "description": "Request a token to access protected resources."
+        },
+        {
+            "name": "groups",
+            "description": "Retrieve a list of groups."
+        },
+        {
+            "name": "sites",
+            "description": "Retrieve a list of sites."
+        },
+        {
+            "name": "version",
+            "description": "Retrieve API version information."
+        }
+    ]
+}
