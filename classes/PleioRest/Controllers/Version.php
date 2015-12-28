@@ -12,13 +12,17 @@ class Version {
      */
     public function getVersion($request, $response, $args) {
         global $CONFIG;
-        include($CONFIG->path . "version.php");
+        include($CONFIG->path . 'version.php');
+
+        preg_match("/(.*?)(?:\.|$)/", gethostname(), $matches);
+        $host = $matches[1];
 
         $info = array(
-            'name' => "Pleio REST API",
+            'name' => 'Pleio REST API',
+            'server' => $host,
             'version' => array(
-                'unfriendly' => $version,
-                'friendly' => $release
+                'friendly' => $release,
+                'unfriendly' => $version
             ),
             'help' => 'For more information check out the Swagger documentation on /api/doc'
         );
