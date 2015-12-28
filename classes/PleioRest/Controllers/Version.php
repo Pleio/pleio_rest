@@ -23,9 +23,15 @@ class Version {
             'version' => array(
                 'friendly' => $release,
                 'unfriendly' => $version
-            ),
-            'help' => 'For more information check out the Swagger documentation on /api/doc'
+            )
         );
+
+        $buildFile = dirname(__FILE__) . '/../../../../../.pleio-version';
+        if (file_exists($buildFile)) {
+            $info['build'] = str_replace(PHP_EOL, '', file_get_contents($buildFile));
+        }
+
+        $info['help'] = 'For more information check out the Swagger documentation on /api/doc';
 
         $response = $response->withHeader('Content-type', 'application/json');
         return $response->write(json_encode($info, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
