@@ -417,6 +417,45 @@
                 }
             }
         },
+        "/api/user/register_push": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Register application for push notifications.",
+                "description": "Register an application to receive push notifications of activities.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "query",
+                        "description": "The token received from Google Cloud Messaging (GCM) or Apple Push Notification Gateway Service (APNS).",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "service",
+                        "in": "query",
+                        "description": "The service (gcm or apns)",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesful operation."
+                    }
+                }
+            }
+        },
         "/api": {
             "get": {
                 "tags": [
@@ -518,6 +557,10 @@
         {
             "name": "version",
             "description": "Retrieve API version information."
+        },
+        {
+            "name": "user",
+            "description": "Perform user-based actions."
         }
     ]
 }

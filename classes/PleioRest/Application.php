@@ -31,6 +31,10 @@ namespace PleioRest;
  *   name="version",
  *   description="Retrieve API version information.",
  * )
+ * @SWG\Tag(
+ *   name="user",
+ *   description="Perform user-based actions.",
+ * )
  */
 
 use \PleioRest\AuthenticationMiddleware as AuthenticationMiddleware;
@@ -44,8 +48,10 @@ class Application {
 
         $app->post('/oauth/v2/token', 'PleioRest\Controllers\Authentication::getToken');
 
-        $app->get('/api', 'PleioRest\Controllers\Version::getVersion');
-        $app->get('/api/doc', 'PleioRest\Controllers\Documentation::getDocumentation');
+        $app->post('/api/user/register_push', 'PleioRest\Controllers\User:registerPush');
+
+        $app->get('/api', 'PleioRest\Controllers\Version:getVersion');
+        $app->get('/api/doc', 'PleioRest\Controllers\Documentation:getDocumentation');
 
         $app->get('/api/activities', 'PleioRest\Controllers\Activities:getAll');
         $app->get('/api/activities/mark_seen', 'PleioRest\Controllers\Activities:markSeen');

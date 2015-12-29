@@ -5,7 +5,6 @@ class AuthenticationMiddleware {
     public function __invoke($request, $response, $next) {
         $params = $request->getQueryParams();
 
-
         if (
             $params['handler'] === "oauth" |
             ($params['handler'] === "api" && !isset($params['page'])) |
@@ -18,12 +17,25 @@ class AuthenticationMiddleware {
         $factory = new AuthenticationServerFactory();
         $server = $factory->getServer();
 
-        if ($server->verifyResourceRequest(\OAuth2\Request::createFromGlobals())) {
-            $response = $next($request, $response);
-            return $response;
-        } else {
+        if (!$server->verifyResourceRequest(\OAuth2\Request::createFromGlobals())) {
             $response = $response->withStatus(403);
             return $response;
         }
+
+        $token = $server->getAccessTokenData(\OAuth2\Request::createFromGlobals());
+        $user = get_user($token['user_id']);
+
+        if (!$user) {
+            $response = $response->withStatus(403);
+            return $response;
+        }
+
+        if (!login($user)) {
+            $response = $response->withStatus(403);
+            return $response;
+        }
+
+        $response = $next($request, $response);
+        return $response;
     }
 }
