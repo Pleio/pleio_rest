@@ -3,6 +3,10 @@ namespace PleioRest\Controllers;
 
 class Sites {
 
+    public function __construct() {
+        $this->handler = new \PleioRest\Services\PushNotificationHandler();
+    }
+
     /**
      * @SWG\Get(
      *     path="/api/sites/mine",
@@ -138,15 +142,20 @@ class Sites {
      *  @SWG\Property(property="name", type="string"),
      *  @SWG\Property(property="url", type="string"),
      *  @SWG\Property(property="membership", type="string", description="Can be open or closed."),
+     *  @SWG\Property(property="icon_url", type="string"),
      *  @SWG\Property(property="time_created", type="string", description="In ISO-8601 format.")
      * )
      */
     private function parseSite(\ElggSite $site) {
+        $user = elgg_get_logged_in_user_entity();
+
         return array(
             'guid' => $site->guid,
             'name' => $site->name,
             'url' => $site->url,
             'membership' => $site instanceof Subsite ? $site->getMembership() : "open",
+            'icon_url' => $site->getIconURL(),
+            'groups_unread_count' => $this->handler->getUnreadGroupsCount($user),
             'time_created' => date('c', $site->time_created) // ISO-8601
         );
     }

@@ -44,25 +44,22 @@ class Application {
     public function run() {
         $app = new \Slim\App(['settings' => ['displayErrorDetails' => true]]);
 
-        $app->add(new AuthenticationMiddleware());
+        //$app->add(new AuthenticationMiddleware());
 
         $app->post('/oauth/v2/token', 'PleioRest\Controllers\Authentication::getToken');
-
-        $app->post('/api/user/register_push', 'PleioRest\Controllers\User:registerPush');
+        $app->post('/api/users/me/register_push', 'PleioRest\Controllers\User:registerPush');
 
         $app->get('/api', 'PleioRest\Controllers\Version:getVersion');
         $app->get('/api/doc', 'PleioRest\Controllers\Documentation:getDocumentation');
-
-        $app->get('/api/activities', 'PleioRest\Controllers\Activities:getAll');
-        $app->get('/api/activities/mark_seen', 'PleioRest\Controllers\Activities:markSeen');
-        $app->get('/api/activities/group/{guid}', 'PleioRest\Controllers\Activities:getGroup');
-        $app->get('/api/activities/group/{guid}/mark_seen', 'PleioRest\Controllers\Activities:markSeen');
 
         $app->get('/api/sites', 'PleioRest\Controllers\Sites:getAll');
         $app->get('/api/sites/mine', 'PleioRest\Controllers\Sites:getMine');
 
         $app->get('/api/groups', 'PleioRest\Controllers\Groups:getAll');
         $app->get('/api/groups/mine', 'PleioRest\Controllers\Groups:getMine');
+
+        $app->get('/api/groups/{guid}/activities', 'PleioRest\Controllers\Activities:getGroup');
+        $app->post('/api/groups/{guid}/activities/mark_read', 'PleioRest\Controllers\Activities:markRead');
 
         $app->run();
     }

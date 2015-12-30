@@ -60,6 +60,10 @@ class PushNotificationHandler {
         return get_data_row("SELECT user_guid FROM {$this->dbprefix}push_notifications_subscriptions WHERE user_guid = {$user->guid}");
     }
 
+    public function getSubscriptions($user) {
+        return get_data("SELECT * FROM {$this->dbprefix}push_notifications_subscriptions WHERE user_guid = {$user->guid}");
+    }
+
     public function addSubscription(\ElggUser $user, $client_id, $service, $token) {
         //@todo: verify stoken
 
@@ -71,15 +75,30 @@ class PushNotificationHandler {
 
     public function incrementNotificationCount($user, $river) {
         $container = $river->getObjectEntity()->getContainerEntity();
-        return insert_data("INSERT INTO {$this->dbprefix}push_notifications_count (user_guid, container_guid, count) VALUES ({$user->guid}, {$container->guid}, 1) ON DUPLICATE KEY UPDATE count=count+1");
+        return insert_data("INSERT INTO {$this->dbprefix}push_notifications_count (user_guid, site_guid, container_guid, count) VALUES ({$user->guid}, {$container->site_guid}, {$container->guid}, 1) ON DUPLICATE KEY UPDATE count=count+1");
     }
 
-    public function getSubscriptions($user) {
-        return get_data("SELECT * FROM {$this->dbprefix}push_notifications_subscriptions WHERE user_guid = {$user->guid}");
+    public function getContainerUnreadCount(\ElggUser $user, \ElggEntity $container) {
+        $row = get_data_row("SELECT * FROM {$this->dbprefix}push_notifications_count WHERE user_guid = {$user->guid} AND container_guid = {$container->guid}");
+        if (!$row) {
+            return 0;
+        } else{
+            return (int) $row->count;
+        }
     }
 
-    public function getUnreadGroupsCount($user) {
-        $row = get_data_row("SELECT COUNT(*) AS count FROM {$this->dbprefix}push_notifications_count WHERE user_guid = {$user->guid}");
-        return $row->count;
+    // @todo: make site sensitive
+    public function getUnreadGroupsCount(\ElggUser $user, \ElggSite $site = null) {
+        if ($site) {
+            $row = get_data_row("SELECT COUNT(*) AS count FROM {$this->dbprefix}push_notifications_count WHERE user_guid = {$user->guid} AND site_guid = {$site->guid}");
+        } else {
+            $row = get_data_row("SELECT COUNT(*) AS count FROM {$this->dbprefix}push_notifications_count WHERE user_guid = {$user->guid}");
+        }
+
+        return (int) $row->count;
+    }
+
+    public function markContainerAsRead(\ElggUser $user, \ElggEntity $container) {
+        return delete_data("DELETE FROM {$this->dbprefix}push_notifications_count WHERE user_guid = {$user->guid} AND container_guid = {$container->guid}");
     }
 }

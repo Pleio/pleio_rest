@@ -3,6 +3,10 @@ namespace PleioRest\Controllers;
 
 class Groups {
 
+    public function __construct() {
+        $this->handler = new \PleioRest\Services\PushNotificationHandler();
+    }
+
     /**
      * @SWG\Get(
      *     path="/api/groups/mine",
@@ -151,15 +155,20 @@ class Groups {
      *  @SWG\Property(property="name", type="string"),
      *  @SWG\Property(property="description", type="string"),
      *  @SWG\Property(property="membership", type="string", description="Can be open or closed."),
+     *  @SWG\Property(property="icon_url", type="string"),
      *  @SWG\Property(property="time_created", type="string")
      * )
      */
     private function parseGroup(\ElggGroup $group) {
+        $user = elgg_get_logged_in_user_entity();
+
         return array(
             'guid' => $group->guid,
             'name' => $group->name,
             'description' => $group->description,
             'membership' => $group->membership === 2 ? "open" : "closed",
+            'icon_url' => $group->getIconURL(),
+            'activities_unread_count' => $this->handler->getContainerUnreadCount($user, $group),
             'time_created' => date('c', $group->time_created) // ISO-8601
         );
     }

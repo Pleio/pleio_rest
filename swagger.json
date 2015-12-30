@@ -10,7 +10,7 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/api/activities/group/{guid}": {
+        "/api/groups/{guid}/activities": {
             "get": {
                 "tags": [
                     "activities"
@@ -70,64 +70,13 @@
                 }
             }
         },
-        "/api/activities": {
-            "get": {
-                "tags": [
-                    "activities"
-                ],
-                "summary": "Find activities of the whole site.",
-                "description": "Find the most recent activities of the whole site.",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "offset",
-                        "in": "query",
-                        "description": "Offset the results by",
-                        "required": false,
-                        "type": "integer",
-                        "format": "int64",
-                        "items": {
-                            "type": "integer"
-                        },
-                        "collectionFormat": "multi",
-                        "default": 0
-                    },
-                    {
-                        "name": "limit",
-                        "in": "query",
-                        "description": "Limit the results by",
-                        "required": false,
-                        "type": "integer",
-                        "format": "int64",
-                        "items": {
-                            "type": "integer"
-                        },
-                        "collectionFormat": "multi",
-                        "default": 20
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Succesful operation.",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Activity"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/activities/group/{guid}/mark_seen": {
+        "/api/groups/{guid}/activities/mark_read": {
             "post": {
                 "tags": [
                     "activities"
                 ],
-                "summary": "Mark the activities in the specific group as seen.",
-                "description": "Mark the activities in the specific group as seen till the most recent activity.",
+                "summary": "Mark the activities in the specific group as read.",
+                "description": "Mark the activities in the specific group as read till the most recent activity.",
                 "produces": [
                     "application/json"
                 ],
@@ -149,23 +98,6 @@
                     },
                     "404": {
                         "description": "Could not find the requested group."
-                    }
-                }
-            }
-        },
-        "/api/activities/mark_seen": {
-            "post": {
-                "tags": [
-                    "activities"
-                ],
-                "summary": "Mark the activities as seen.",
-                "description": "Mark the activities as seen till the most recent activity.",
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Succesful operation."
                     }
                 }
             }
@@ -481,6 +413,15 @@
                 },
                 "subject": {
                     "type": "string"
+                },
+                "action_type": {
+                    "type": "string"
+                },
+                "object": {
+                    "type": "string"
+                },
+                "time_created": {
+                    "type": "string"
                 }
             }
         },
@@ -502,6 +443,9 @@
                 },
                 "membership": {
                     "description": "Can be open or closed.",
+                    "type": "string"
+                },
+                "icon_url": {
                     "type": "string"
                 },
                 "time_created": {
@@ -528,6 +472,9 @@
                 },
                 "membership": {
                     "description": "Can be open or closed.",
+                    "type": "string"
+                },
+                "icon_url": {
                     "type": "string"
                 },
                 "time_created": {
