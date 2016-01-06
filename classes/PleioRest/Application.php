@@ -44,7 +44,7 @@ class Application {
     public function run() {
         $app = new \Slim\App(['settings' => ['displayErrorDetails' => true]]);
 
-        //$app->add(new AuthenticationMiddleware());
+        $app->add(new AuthenticationMiddleware());
 
         $app->post('/oauth/v2/token', 'PleioRest\Controllers\Authentication::getToken');
         $app->post('/api/users/me/register_push', 'PleioRest\Controllers\User:registerPush');

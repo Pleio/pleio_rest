@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(__FILE__) . "/lib/events.php");
+require_once(dirname(__FILE__) . "/lib/hooks.php");
 
 require_once(dirname(__FILE__) . "/../../vendor/autoload.php");
 spl_autoload_register('pleio_rest_autoloader');
@@ -13,6 +14,7 @@ function pleio_rest_autoloader($class) {
 function pleio_rest_init() {
     elgg_register_page_handler("api", "pleio_rest_page_handler");
     elgg_register_page_handler("oauth", "pleio_rest_page_handler");
+    elgg_register_plugin_hook_handler("public_pages", "walled_garden", "pleio_rest_public_pages");
 
     elgg_register_event_handler("created", "river", "pleio_rest_created_river_event_handler");
 }
