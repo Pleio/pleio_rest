@@ -24,7 +24,8 @@ class AuthenticationServerFactory {
         $server->addGrantType(new \OAuth2\GrantType\UserCredentials($uc_storage));
 
         $server->addGrantType(new \OAuth2\GrantType\RefreshToken($storage, array(
-            'always_issue_new_refresh_token' => true
+            'always_issue_new_refresh_token' => true,
+            'refresh_token_lifetime' => 3600*24*30*6 // 6 months
         )));
 
         $this->server = $server;
