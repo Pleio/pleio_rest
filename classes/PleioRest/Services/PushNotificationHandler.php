@@ -37,27 +37,20 @@ class PushNotificationHandler {
     public function getSubscribers($river) {
         $container = $river->getObjectEntity()->getContainerEntity();
 
-        $batch = new \ElggBatch('elgg_get_entities_from_relationship', array(
-            'relationship' => 'member',
-            'relationship_guid' => $container->guid,
-            'inverse_relationship' => true,
-            'type' => 'user'
-        ));
-
-        foreach ($batch as $user) {
-            if ($user === $river->getSubjectEntity()) {
-                //continue;
-            }
-            if (!$this->isRegistered($user)) {
-                continue;
-            }
-
-            yield $user;
+        $members = $this->getMembers($container);
+        foreach ($members as $member) {
+                if ($this->isRegistered($member->guid)) {
+                    yield $member;
+                }
         }
     }
 
-    public function isRegistered($user) {
-        return get_data_row("SELECT user_guid FROM {$this->dbprefix}push_notifications_subscriptions WHERE user_guid = {$user->guid}");
+    public function isRegistered($user_guid) {
+        return get_data_row("SELECT user_guid FROM {$this->dbprefix}push_notifications_subscriptions WHERE user_guid = {$user_guid}");
+    }
+
+    public function getMembers(ElggGroup $group) {
+        return get_data("SELECT guid_one AS guid FROM {$this->dbprefix}entity_relationships WHERE relationship = 'member' AND guid_two = {$group->guid}");
     }
 
     public function getSubscriptions($user) {
@@ -87,12 +80,11 @@ class PushNotificationHandler {
         }
     }
 
-    // @todo: make site sensitive
     public function getUnreadGroupsCount(\ElggUser $user, \ElggSite $site = null) {
         if ($site) {
             $row = get_data_row("SELECT COUNT(*) AS count FROM {$this->dbprefix}push_notifications_count WHERE user_guid = {$user->guid} AND site_guid = {$site->guid}");
         } else {
-            $row = get_data_row("SELECT COUNT(*) AS count FROM {$this->dbprefix}push_notifications_count WHERE user_guid = {$user->guid}");
+            $row = get_data_row("SELECT SUM(count) AS count FROM {$this->dbprefix}push_notifications_count WHERE user_guid = {$user->guid} GROUP BY user_guid");
         }
 
         return (int) $row->count;
