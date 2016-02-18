@@ -28,7 +28,7 @@ class ApnsPush implements PushInterface {
         $body = array();
 
         $body['aps'] = array();
-        $body['aps']['alert'] = 'This is a push message.';
+        $body['aps']['alert'] = $message['title'];
         $body['aps']['badge'] = $message['count'];
         $body['aps']['sound'] = 'default';
 

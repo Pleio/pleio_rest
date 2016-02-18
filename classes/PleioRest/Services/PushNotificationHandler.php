@@ -25,7 +25,7 @@ class PushNotificationHandler {
         foreach ($subscriptions as $subscription) {
             $service = $this->factory->getService($subscription);
             if ($service) {
-                $service->push($subscription, array(
+                $response = $service->push($subscription, array(
                     'count' => $unreadGroupsCount
                 ));
 
@@ -58,11 +58,10 @@ class PushNotificationHandler {
     }
 
     public function addSubscription(\ElggUser $user, $client_id, $service, $token) {
-        //@todo: verify stoken
-
         $client_id = mysql_real_escape_string($client_id);
         $service = mysql_real_escape_string($service);
         $token = mysql_real_escape_string($token);
+
         return insert_data("INSERT INTO {$this->dbprefix}push_notifications_subscriptions (user_guid, client_id, service, token) VALUES (\"{$user->guid}\", \"{$client_id}\", \"{$service}\", \"{$token}\")");
     }
 
