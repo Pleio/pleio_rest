@@ -11,12 +11,10 @@ function pleio_rest_subsite_plugin_enabled(Subsite $site) {
         'site_guid' => $site->guid,
         'joins' => array("JOIN {$db_prefix}objects_entity oe on oe.guid = e.guid"),
         'selects' => array("oe.title"),
-        'wheres' => array("oe.title = \"pleio_rest\""),
-        'count' => true
+        'wheres' => array("oe.title = \"pleio_rest\"")
     );
 
     $plugin_enabled = elgg_get_entities_from_relationship($options);
-
     if (count($plugin_enabled) == 1) {
         return true;
     }
