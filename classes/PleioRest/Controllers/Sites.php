@@ -11,8 +11,8 @@ class Sites {
      * @SWG\Get(
      *     path="/api/sites/mine",
      *     tags={"sites"},
-     *     summary="Retrieve a list of sites the current user is member of.",
-     *     description="Retrieve a list of sites the current user is member of.",
+     *     summary="Retrieve a list of sites the current user is member of and that have the API enabled.",
+     *     description="Retrieve a list of sites the current user is member of and that have the API enabled.",
      *     produces={"application/json"},
      *     @SWG\Parameter(
      *         name="offset",
@@ -44,24 +44,18 @@ class Sites {
      */
     public function getMine($request, $response, $args) {
         $params = $request->getQueryParams();
-        $limit = (int) $params['limit'];
-        $offset = (int) $params['offset'];
-
-        if (!$limit | $limit < 0 | $limit > 50) {
-            $limit = 20;
-        }
-
         $current_user = elgg_get_logged_in_user_entity();
-        foreach (subsite_manager_get_user_subsites($current_user->guid) as $entity) {
-            $entities[] = $this->parseSite($entity);
-        }
 
-        $options['count'] = true;
-        $total = elgg_get_entities($options);
+        $entities = array();
+        foreach (subsite_manager_get_user_subsites($current_user->guid) as $entity) {
+            if (pleio_rest_subsite_plugin_enabled($entity)) {
+                $entities[] = $this->parseSite($entity);
+            }
+        }
 
         $response = $response->withHeader('Content-type', 'application/json');
         return $response->write(json_encode(array(
-            'total' => $total,
+            'total' => count($entities),
             'entities' => $entities
         ), JSON_PRETTY_PRINT));
     }

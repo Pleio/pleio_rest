@@ -57,12 +57,14 @@ class PushNotificationHandler {
         return get_data("SELECT * FROM {$this->dbprefix}push_notifications_subscriptions WHERE user_guid = {$user->guid}");
     }
 
-    public function addSubscription(\ElggUser $user, $client_id, $service, $token) {
+    public function addSubscription(\ElggUser $user, $client_id, $service, $device_id, $token) {
         $client_id = mysql_real_escape_string($client_id);
         $service = mysql_real_escape_string($service);
+        $device_id = mysql_real_escape_string($device_id);
         $token = mysql_real_escape_string($token);
 
-        return insert_data("INSERT INTO {$this->dbprefix}push_notifications_subscriptions (user_guid, client_id, service, token) VALUES (\"{$user->guid}\", \"{$client_id}\", \"{$service}\", \"{$token}\")");
+        delete_data("DELETE FROM {$this->dbprefix}push_notifications_subscriptions WHERE user_guid = {$user->guid} AND device_id = \"{$device_id}\"");
+        return insert_data("INSERT INTO {$this->dbprefix}push_notifications_subscriptions (user_guid, client_id, service, device_id, token) VALUES (\"{$user->guid}\", \"{$client_id}\", \"{$service}\", \"{$device_id}\", \"{$token}\")");
     }
 
     public function incrementNotificationCount($user, $river) {

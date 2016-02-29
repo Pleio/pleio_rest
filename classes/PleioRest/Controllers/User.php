@@ -5,7 +5,7 @@ class User {
 
     /**
      * @SWG\Post(
-     *     path="/api/user/register_push",
+     *     path="/api/users/me/register_push",
      *     tags={"user"},
      *     summary="Register application for push notifications.",
      *     description="Register an application to receive push notifications of activities.",
@@ -38,6 +38,8 @@ class User {
         $accessData = $server->getAccessTokenData(\OAuth2\Request::createFromGlobals());
 
         $vars = $request->getParsedBody();
+        
+        $device_id = $vars['device_id'];
         $token = $vars['token'];
         $service = $vars['service'];
 
@@ -46,6 +48,6 @@ class User {
         }
 
         $handler = new \PleioRest\Services\PushNotificationHandler;
-        $handler->addSubscription(elgg_get_logged_in_user_entity(), $accessData['client_id'], $service, $token);
+        $handler->addSubscription(elgg_get_logged_in_user_entity(), $accessData['client_id'], $service, $device_id, $token);
     }
 }
