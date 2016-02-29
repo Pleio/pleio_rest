@@ -40,3 +40,13 @@ to install this package globally. Then run
     ~/.composer/vendor/bin/swagger
 
 inside this plugin folder to generate swagger.json.
+
+REST calls
+----------
+Authorization is done by using OAuth2 access tokens. Request a new access token like:
+
+    curl  --data "client_id=pleioapp&client_secret=as389sfj3lkjsf3&username=admin&password=adminadmin&grant_type=password" http://www.pleio.dev/oauth/v2/token
+
+Then perform authenticated requests like this:
+
+    curl -v -H "Authorization: Bearer <access_token>" https://www.pleio,dev/api/groups
