@@ -15,7 +15,7 @@ class ApnsPush implements PushInterface {
 
         stream_context_set_option($this->ctx, 'ssl' ,'local_cert', $tmp_file);
 
-        if ($CONFIG->env == "test") {
+        if (isset($CONFIG->pleio_rest_env) && $CONFIG->pleio_rest_env == "test") {
             $host = "gateway.sandbox.push.apple.com";
         } else {
             $host = "gateway.push.apple.com";
