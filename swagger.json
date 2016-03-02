@@ -260,8 +260,8 @@
                 "tags": [
                     "sites"
                 ],
-                "summary": "Retrieve a list of sites the current user is member of.",
-                "description": "Retrieve a list of sites the current user is member of.",
+                "summary": "Retrieve a list of sites the current user is member of and that have the API enabled.",
+                "description": "Retrieve a list of sites the current user is member of and that have the API enabled.",
                 "produces": [
                     "application/json"
                 ],
@@ -349,7 +349,7 @@
                 }
             }
         },
-        "/api/user/register_push": {
+        "/api/users/me/register_push": {
             "post": {
                 "tags": [
                     "user"

@@ -51,6 +51,7 @@ class Application {
 
         $app->get('/api', 'PleioRest\Controllers\Version:getVersion');
         $app->get('/api/doc', 'PleioRest\Controllers\Documentation:getDocumentation');
+        $app->get('/api/doc/swagger', 'PleioRest\Controllers\Documentation:getSwagger');
 
         $app->get('/api/sites', 'PleioRest\Controllers\Sites:getAll');
         $app->get('/api/sites/mine', 'PleioRest\Controllers\Sites:getMine');

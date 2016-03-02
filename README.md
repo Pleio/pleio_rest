@@ -49,4 +49,4 @@ Authorization is done by using OAuth2 access tokens. Request a new access token 
 
 Then perform authenticated requests like this:
 
-    curl -v -H "Authorization: Bearer <access_token>" https://www.pleio,dev/api/groups
+    curl -v -H "Authorization: Bearer <access_token>" https://www.pleio.dev/api/groups
