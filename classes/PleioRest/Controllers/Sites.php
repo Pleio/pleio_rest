@@ -10,7 +10,7 @@ class Sites {
     /**
      * @SWG\Get(
      *     path="/api/sites/mine",
-     *     security={{"oauth2": {"scope"}}},
+     *     security={{"oauth2": {"all"}}},
      *     tags={"sites"},
      *     summary="Retrieve a list of sites the current user is member of and that have the API enabled.",
      *     description="Retrieve a list of sites the current user is member of and that have the API enabled.",
@@ -64,7 +64,7 @@ class Sites {
     /**
      * @SWG\Get(
      *     path="/api/sites",
-     *     security={{"oauth2": {"scope"}}},
+     *     security={{"oauth2": {"all"}}},
      *     tags={"sites"},
      *     summary="Retrieve a list of all sites.",
      *     description="Retrieve a list of all sites.",

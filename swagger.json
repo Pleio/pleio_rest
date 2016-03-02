@@ -9,6 +9,10 @@
         },
         "version": "1.0.0"
     },
+    "host": "www.pleio.nl",
+    "schemes": [
+        "https"
+    ],
     "paths": {
         "/api/groups/{guid}/activities": {
             "get": {
@@ -71,7 +75,7 @@
                 "security": [
                     {
                         "oauth2": [
-                            "scope"
+                            "all"
                         ]
                     }
                 ]
@@ -110,7 +114,7 @@
                 "security": [
                     {
                         "oauth2": [
-                            "scope"
+                            "all"
                         ]
                     }
                 ]
@@ -223,7 +227,7 @@
                 "security": [
                     {
                         "oauth2": [
-                            "scope"
+                            "all"
                         ]
                     }
                 ]
@@ -277,7 +281,7 @@
                 "security": [
                     {
                         "oauth2": [
-                            "scope"
+                            "all"
                         ]
                     }
                 ]
@@ -331,7 +335,7 @@
                 "security": [
                     {
                         "oauth2": [
-                            "scope"
+                            "all"
                         ]
                     }
                 ]
@@ -385,7 +389,7 @@
                 "security": [
                     {
                         "oauth2": [
-                            "scope"
+                            "all"
                         ]
                     }
                 ]
@@ -431,7 +435,7 @@
                 "security": [
                     {
                         "oauth2": [
-                            "scope"
+                            "all"
                         ]
                     }
                 ]
@@ -536,9 +540,6 @@
     "securityDefinitions": {
         "oauth2": {
             "type": "oauth2",
-            "description": "OAuth2 authorization.",
-            "name": "Authorization",
-            "in": "header",
             "flow": "password",
             "tokenUrl": "https://www.pleio.nl/oauth/v2/token",
             "scopes": {

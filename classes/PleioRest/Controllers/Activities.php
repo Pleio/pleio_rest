@@ -5,7 +5,7 @@ class Activities {
     /**
      * @SWG\Get(
      *     path="/api/groups/{guid}/activities",
-     *     security={{"oauth2": {"scope"}}},
+     *     security={{"oauth2": {"all"}}},
      *     tags={"activities"},
      *     summary="Find activities in a specific group.",
      *     description="Find the most recent activities from a specific group.",
@@ -96,7 +96,7 @@ class Activities {
     /**
      * @SWG\Post(
      *     path="/api/groups/{guid}/activities/mark_read",
-     *     security={{"oauth2": {"scope"}}},
+     *     security={{"oauth2": {"all"}}},
      *     tags={"activities"},
      *     summary="Mark the activities in the specific group as read.",
      *     description="Mark the activities in the specific group as read till the most recent activity.",

@@ -10,7 +10,7 @@ class Groups {
     /**
      * @SWG\Get(
      *     path="/api/groups/mine",
-     *     security={{"oauth2": {"scope"}}},
+     *     security={{"oauth2": {"all"}}},
      *     tags={"groups"},
      *     summary="Retrieve a list of groups the current user is member of.",
      *     description="Retrieve a list of groups the current user is member of.",
@@ -83,7 +83,7 @@ class Groups {
     /**
      * @SWG\Get(
      *     path="/api/groups",
-     *     security={{"oauth2": {"scope"}}},
+     *     security={{"oauth2": {"all"}}},
      *     tags={"groups"},
      *     summary="Retrieve a list of all the groups on the site.",
      *     description="Retrieve a list of all the groups on the site.",

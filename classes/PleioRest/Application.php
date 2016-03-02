@@ -2,6 +2,10 @@
 namespace PleioRest;
 
 /**
+ * @SWG\Swagger(
+ *   schemes={"https"},
+ *   host="www.pleio.nl"
+ * )
  * @SWG\Info(
  *   version="1.0.0",
  *   title="Pleio REST API",
@@ -14,11 +18,8 @@ namespace PleioRest;
  * @SWG\SecurityScheme(
  *   securityDefinition="oauth2",
  *   type="oauth2",
- *   description="OAuth2 authorization.",
- *   name="Authorization",
- *   in="header",
- *   flow="password",
  *   tokenUrl="https://www.pleio.nl/oauth/v2/token",
+ *   flow="password",
  *   scopes={"all": "Perform all actions"}
  * )
  * @SWG\Tag(
