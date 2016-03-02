@@ -67,7 +67,14 @@
                     "404": {
                         "description": "Could not find the requested group."
                     }
-                }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "scope"
+                        ]
+                    }
+                ]
             }
         },
         "/api/groups/{guid}/activities/mark_read": {
@@ -99,7 +106,14 @@
                     "404": {
                         "description": "Could not find the requested group."
                     }
-                }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "scope"
+                        ]
+                    }
+                ]
             }
         },
         "/oauth/v2/token": {
@@ -205,7 +219,14 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "scope"
+                        ]
+                    }
+                ]
             }
         },
         "/api/groups": {
@@ -252,7 +273,14 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "scope"
+                        ]
+                    }
+                ]
             }
         },
         "/api/sites/mine": {
@@ -299,7 +327,14 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "scope"
+                        ]
+                    }
+                ]
             }
         },
         "/api/sites": {
@@ -346,7 +381,14 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "scope"
+                        ]
+                    }
+                ]
             }
         },
         "/api/users/me/register_push": {
@@ -385,7 +427,14 @@
                     "200": {
                         "description": "Succesful operation."
                     }
-                }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "scope"
+                        ]
+                    }
+                ]
             }
         },
         "/api": {
@@ -481,6 +530,19 @@
                     "description": "In ISO-8601 format.",
                     "type": "string"
                 }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "oauth2": {
+            "type": "oauth2",
+            "description": "OAuth2 authorization.",
+            "name": "Authorization",
+            "in": "header",
+            "flow": "password",
+            "tokenUrl": "https://www.pleio.nl/oauth/v2/token",
+            "scopes": {
+                "all": "Perform all actions"
             }
         }
     },

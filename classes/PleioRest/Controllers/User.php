@@ -6,6 +6,7 @@ class User {
     /**
      * @SWG\Post(
      *     path="/api/users/me/register_push",
+     *     security={{"oauth2": {"scope"}}},
      *     tags={"user"},
      *     summary="Register application for push notifications.",
      *     description="Register an application to receive push notifications of activities.",

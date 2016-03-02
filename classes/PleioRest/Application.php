@@ -11,6 +11,16 @@ namespace PleioRest;
  *     email="helpdesk@pleio.nl"
  *   ),
  * )
+ * @SWG\SecurityScheme(
+ *   securityDefinition="oauth2",
+ *   type="oauth2",
+ *   description="OAuth2 authorization.",
+ *   name="Authorization",
+ *   in="header",
+ *   flow="password",
+ *   tokenUrl="https://www.pleio.nl/oauth/v2/token",
+ *   scopes={"all": "Perform all actions"}
+ * )
  * @SWG\Tag(
  *   name="activities",
  *   description="Retrieve the latest activities."
