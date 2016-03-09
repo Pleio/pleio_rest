@@ -104,13 +104,28 @@ class Events {
      * )
      */
     private function parseEvent(\ElggObject $event) {
+        $start_time = mktime(
+            date("H", $event->start_time),
+            date("i", $event->start_time),
+            0,
+            date("n", $event->start_day),
+            date("j", $event->start_day),
+            date("Y", $event->start_day)
+        );
+
+        if ($event->end_ts) {
+            $end_time = date('c', $event->end_ts);
+        } else {
+            $end_time = null;
+        }
+
         return array(
             'guid' => $event->guid,
             'title' => $event->title,
             'description' => $event->description,
-            'from' => $event->from,
-            'to' => $event->to,
-            'time_created' => date('c', $event->time_created) // ISO-8601,
+            'start_time' => date('c', $start_time), // ISO-8601
+            'end_time' => $end_time,
+            'time_created' => date('c', $event->time_created)
         );
     }
 }
