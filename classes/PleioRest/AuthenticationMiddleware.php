@@ -9,7 +9,8 @@ class AuthenticationMiddleware {
             $params['handler'] === "oauth" |
             ($params['handler'] === "api" && !isset($params['page'])) |
             ($params['handler'] === "api" && $params['page'] === "doc") |
-            ($params['handler'] === "api" && $params['page'] === "doc/swagger")
+            ($params['handler'] === "api" && $params['page'] === "doc/swagger") |
+            ($params['handler'] === "api" && $params['page'] === "users/me/login_token")
         ) {
             $response = $next($request, $response);
             return $response;

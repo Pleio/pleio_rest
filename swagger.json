@@ -179,6 +179,73 @@
                 }
             }
         },
+        "/api/groups/{guid}/events": {
+            "get": {
+                "tags": [
+                    "events"
+                ],
+                "summary": "Find events in a specific group.",
+                "description": "Find the most recent events from a specific group.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "guid",
+                        "in": "path",
+                        "description": "The guid of the specific group",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Offset the results by",
+                        "required": false,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "default": 0
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit the results by",
+                        "required": false,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "default": 20
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesful operation.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Event"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Could not find the requested event."
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "all"
+                        ]
+                    }
+                ]
+            }
+        },
         "/api/groups/mine": {
             "get": {
                 "tags": [
@@ -276,6 +343,73 @@
                                 "$ref": "#/definitions/Group"
                             }
                         }
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "all"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/api/groups/{guid}/members": {
+            "get": {
+                "tags": [
+                    "members"
+                ],
+                "summary": "Find members in a specific group.",
+                "description": "Find the members from a specific group.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "guid",
+                        "in": "path",
+                        "description": "The guid of the specific group",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Offset the results by",
+                        "required": false,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "default": 0
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit the results by",
+                        "required": false,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "default": 20
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesful operation.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Event"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Could not find the requested event."
                     }
                 },
                 "security": [
@@ -395,6 +529,30 @@
                 ]
             }
         },
+        "/api/users/me/generate_token": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Generate a single-use login token for the user.",
+                "description": "Generate a single-use login token for the user.",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesful operation."
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "all"
+                        ]
+                    }
+                ]
+            }
+        },
         "/api/users/me/register_push": {
             "post": {
                 "tags": [
@@ -478,6 +636,32 @@
                 }
             }
         },
+        "Event": {
+            "required": [
+                "guid",
+                "title"
+            ],
+            "properties": {
+                "guid": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "from": {
+                    "type": "string"
+                },
+                "to": {
+                    "type": "string"
+                },
+                "time_created": {
+                    "type": "string"
+                }
+            }
+        },
         "Group": {
             "required": [
                 "guid",
@@ -502,6 +686,26 @@
                     "type": "string"
                 },
                 "time_created": {
+                    "type": "string"
+                }
+            }
+        },
+        "User": {
+            "required": [
+                "guid",
+                "name"
+            ],
+            "properties": {
+                "guid": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "icon_url": {
+                    "type": "string"
+                },
+                "url": {
                     "type": "string"
                 }
             }
@@ -563,6 +767,14 @@
         {
             "name": "sites",
             "description": "Retrieve a list of sites."
+        },
+        {
+            "name": "events",
+            "description": "Retrieve a list of events."
+        },
+        {
+            "name": "members",
+            "description": "Retrieve a list of members."
         },
         {
             "name": "version",

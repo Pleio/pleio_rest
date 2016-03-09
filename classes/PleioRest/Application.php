@@ -39,6 +39,14 @@ namespace PleioRest;
  *   description="Retrieve a list of sites.",
  * )
  * @SWG\Tag(
+ *   name="events",
+ *   description="Retrieve a list of events."
+ * )
+ * @SWG\Tag(
+ *   name="members",
+ *   description="Retrieve a list of members."
+ * )
+ * @SWG\Tag(
  *   name="version",
  *   description="Retrieve API version information.",
  * )
@@ -59,6 +67,8 @@ class Application {
 
         $app->post('/oauth/v2/token', 'PleioRest\Controllers\Authentication::getToken');
         $app->post('/api/users/me/register_push', 'PleioRest\Controllers\User:registerPush');
+        $app->post('/api/users/me/generate_token', 'PleioRest\Controllers\User:generateToken');
+        $app->get('/api/users/me/login_token', 'PleioRest\Controllers\User:loginToken');
 
         $app->get('/api', 'PleioRest\Controllers\Version:getVersion');
         $app->get('/api/doc', 'PleioRest\Controllers\Documentation:getDocumentation');
@@ -72,6 +82,9 @@ class Application {
 
         $app->get('/api/groups/{guid}/activities', 'PleioRest\Controllers\Activities:getGroup');
         $app->post('/api/groups/{guid}/activities/mark_read', 'PleioRest\Controllers\Activities:markRead');
+
+        $app->get('/api/groups/{guid}/events', 'PleioRest\Controllers\Events:getGroup');
+        $app->get('/api/groups/{guid}/members', 'PleioRest\Controllers\Members:getGroup');
 
         $app->run();
     }
