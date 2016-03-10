@@ -98,8 +98,9 @@ class Events {
      *  @SWG\Property(property="guid", type="integer"),
      *  @SWG\Property(property="title", type="string"),
      *  @SWG\Property(property="description", type="string"),
-     *  @SWG\Property(property="from", type="string"),
-     *  @SWG\Property(property="to", type="string"),
+     *  @SWG\Property(property="start_time", type="string"),
+     *  @SWG\Property(property="end_time", type="string"),
+     *  @SWG\Property(property="url", type="string"),
      *  @SWG\Property(property="time_created", type="string")
      * )
      */
@@ -125,6 +126,7 @@ class Events {
             'description' => $event->description,
             'start_time' => date('c', $start_time), // ISO-8601
             'end_time' => $end_time,
+            'url' => $event->getURL(),
             'time_created' => date('c', $event->time_created)
         );
     }

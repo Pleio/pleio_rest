@@ -162,7 +162,8 @@ class Activities {
             'object' => array(
                 'guid' => $activity->object_guid,
                 'type' => $object->getSubtype(),
-                'title' => $object->title
+                'title' => $object->title,
+                'url' => $object->getURL()
             ),
             'time_created' => date('c', $activity->posted) // ISO-8601,
         );

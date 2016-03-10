@@ -651,10 +651,13 @@
                 "description": {
                     "type": "string"
                 },
-                "from": {
+                "start_time": {
                     "type": "string"
                 },
-                "to": {
+                "end_time": {
+                    "type": "string"
+                },
+                "url": {
                     "type": "string"
                 },
                 "time_created": {
@@ -684,6 +687,12 @@
                 },
                 "icon_url": {
                     "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "activities_unread_count": {
+                    "type": "integer"
                 },
                 "time_created": {
                     "type": "string"

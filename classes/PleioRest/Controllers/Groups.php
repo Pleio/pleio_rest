@@ -158,6 +158,8 @@ class Groups {
      *  @SWG\Property(property="description", type="string"),
      *  @SWG\Property(property="membership", type="string", description="Can be open or closed."),
      *  @SWG\Property(property="icon_url", type="string"),
+     *  @SWG\Property(property="url", type="string"),
+     *  @SWG\Property(property="activities_unread_count", type="integer"),
      *  @SWG\Property(property="time_created", type="string")
      * )
      */
@@ -170,6 +172,7 @@ class Groups {
             'description' => $group->description,
             'membership' => $group->membership === 2 ? "open" : "closed",
             'icon_url' => $group->getIconURL(),
+            'url' => $group->getURL(),
             'activities_unread_count' => $this->handler->getContainerUnreadCount($user, $group),
             'time_created' => date('c', $group->time_created) // ISO-8601
         );
