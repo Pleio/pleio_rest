@@ -67,13 +67,18 @@ class Members {
             $limit = 20;
         }
 
+        $db_prefix = elgg_get_config('dbprefix');
         $options = array(
             'relationship' => 'member',
             'relationship_guid' => $group->guid,
             'inverse_relationship' => true,
             'type' => 'user',
             'limit' => $limit,
-            'offset' => $offset
+            'offset' => $offset,
+            'joins' => array(
+                "JOIN {$db_prefix}users_entity oe ON e.guid = oe.guid"
+            ),
+            'order_by' => 'oe.name'
         );
 
         $entities = array();

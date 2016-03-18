@@ -151,6 +151,12 @@ class Activities {
         $subject = get_entity($activity->subject_guid);
         $object = get_entity($activity->object_guid);
 
+        if ($object instanceof \ElggWire) {
+            $objectTitle = html_entity_decode($object->description);
+        } else {
+            $objectTitle = html_entity_decode($object->title);
+        }
+
         return array(
             'id' => $activity->id,
             'subject' => array(
@@ -162,7 +168,7 @@ class Activities {
             'object' => array(
                 'guid' => $activity->object_guid,
                 'type' => $object->getSubtype(),
-                'title' => html_entity_decode($object->title),
+                'title' => $objectTitle,
                 'url' => $object->getURL()
             ),
             'time_created' => date('c', $activity->posted) // ISO-8601,

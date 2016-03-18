@@ -109,6 +109,7 @@ class Events {
      *  @SWG\Property(property="start_time", type="string"),
      *  @SWG\Property(property="end_time", type="string"),
      *  @SWG\Property(property="url", type="string"),
+     *  @SWG\Property(property="icon_url", type="string"),
      *  @SWG\Property(property="time_created", type="string")
      * )
      */
@@ -135,6 +136,7 @@ class Events {
             'start_time' => date('c', $start_time), // ISO-8601
             'end_time' => $end_time,
             'url' => $event->getURL(),
+            'icon_url' => $event->getIconURL(),
             'time_created' => date('c', $event->time_created)
         );
     }
