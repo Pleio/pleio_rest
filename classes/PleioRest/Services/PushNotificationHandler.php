@@ -49,7 +49,7 @@ class PushNotificationHandler {
         return get_data_row("SELECT user_guid FROM {$this->dbprefix}push_notifications_subscriptions WHERE user_guid = {$user_guid}");
     }
 
-    public function getMembers(ElggGroup $group) {
+    public function getMembers(\ElggGroup $group) {
         return get_data("SELECT guid_one AS guid FROM {$this->dbprefix}entity_relationships WHERE relationship = 'member' AND guid_two = {$group->guid}");
     }
 
@@ -81,7 +81,7 @@ class PushNotificationHandler {
         }
     }
 
-    public function getUnreadGroupsCount(\ElggUser $user, \ElggSite $site = null) {
+    public function getUnreadGroupsCount($user, $site = null) {
         if ($site) {
             $row = get_data_row("SELECT COUNT(*) AS count FROM {$this->dbprefix}push_notifications_count WHERE user_guid = {$user->guid} AND site_guid = {$site->guid}");
         } else {
