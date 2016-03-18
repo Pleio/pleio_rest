@@ -73,16 +73,24 @@ class Events {
             'subtype' => 'event',
             'offset' => $offset,
             'limit' => $limit,
-            'container_guid' => $group->guid
+            'container_guid' => $group->guid,
+            'metadata_name_value_pairs' => array(
+                array('name' => 'start_day', 'operand' => '>=', 'value' => mktime(0, 0, 1))
+            ),
+            'order_by_metadata' => array(
+                'name' => 'start_day',
+                'direction' => 'ASC',
+                'as' => 'integer'
+            )
         );
 
         $entities = array();
-        foreach (elgg_get_entities($options) as $entity) {
+        foreach (elgg_get_entities_from_metadata($options) as $entity) {
             $entities[] = $this->parseEvent($entity);
         }
 
         $options['count'] = true;
-        $total = elgg_get_entities($options);
+        $total = elgg_get_entities_from_metadata($options);
 
         $response = $response->withHeader('Content-type', 'application/json');
         return $response->write(json_encode(array(
