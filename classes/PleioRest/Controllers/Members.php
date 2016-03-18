@@ -63,7 +63,7 @@ class Members {
         $limit = (int) $params['limit'];
         $offset = (int) $params['offset'];
 
-        if (!$limit | $limit < 0 | $limit > 50) {
+        if (!$limit | $limit < 0 | $limit > 100) {
             $limit = 20;
         }
 
