@@ -168,8 +168,8 @@ class Groups {
 
         return array(
             'guid' => $group->guid,
-            'name' => $group->name,
-            'description' => $group->description,
+            'name' => html_entity_decode($group->name),
+            'description' => html_entity_decode($group->description),
             'membership' => $group->membership === 2 ? "open" : "closed",
             'icon_url' => $group->getIconURL(),
             'url' => $group->getURL(),

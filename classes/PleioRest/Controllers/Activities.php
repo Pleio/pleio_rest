@@ -155,14 +155,14 @@ class Activities {
             'id' => $activity->id,
             'subject' => array(
                 'guid' => $activity->subject_guid,
-                'name' => $subject->name,
+                'name' => html_entity_decode($subject->name),
                 'icon_url' => $subject->getIconURL()
             ),
             'action_type' => $activity->action_type,
             'object' => array(
                 'guid' => $activity->object_guid,
                 'type' => $object->getSubtype(),
-                'title' => $object->title,
+                'title' => html_entity_decode($object->title),
                 'url' => $object->getURL()
             ),
             'time_created' => date('c', $activity->posted) // ISO-8601,

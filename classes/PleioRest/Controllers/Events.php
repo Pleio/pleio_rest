@@ -122,8 +122,8 @@ class Events {
 
         return array(
             'guid' => $event->guid,
-            'title' => $event->title,
-            'description' => $event->description,
+            'title' => html_entity_decode($event->title),
+            'description' => html_entity_decode($event->description),
             'start_time' => date('c', $start_time), // ISO-8601
             'end_time' => $end_time,
             'url' => $event->getURL(),
