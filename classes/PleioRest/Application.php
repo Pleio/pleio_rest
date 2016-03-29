@@ -67,6 +67,7 @@ class Application {
 
         $app->post('/oauth/v2/token', 'PleioRest\Controllers\Authentication::getToken');
         $app->post('/api/users/me/register_push', 'PleioRest\Controllers\User:registerPush');
+        $app->post('/api/users/me/deregister_push', 'PleioRest\Controllers\User:deregisterPush');
         $app->post('/api/users/me/generate_token', 'PleioRest\Controllers\User:generateToken');
         $app->get('/api/users/me/login_token', 'PleioRest\Controllers\User:loginToken');
 

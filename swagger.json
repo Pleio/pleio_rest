@@ -565,6 +565,26 @@
                 ],
                 "parameters": [
                     {
+                        "name": "service",
+                        "in": "query",
+                        "description": "The service (gcm or apns)",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "device_id",
+                        "in": "query",
+                        "description": "The unique device ID.",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "token",
                         "in": "query",
                         "description": "The token received from Google Cloud Messaging (GCM) or Apple Push Notification Gateway Service (APNS).",
@@ -573,11 +593,47 @@
                         "items": {
                             "type": "string"
                         }
-                    },
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesful operation."
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "all"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/api/users/me/deregister_push": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Deregister application for push notifications.",
+                "description": "Deregister an application to receive push notifications of activities.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
                     {
                         "name": "service",
                         "in": "query",
                         "description": "The service (gcm or apns)",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "device_id",
+                        "in": "query",
+                        "description": "The token received from Google Cloud Messaging (GCM) or Apple Push Notification Gateway Service (APNS).",
                         "required": true,
                         "type": "string",
                         "items": {
@@ -658,6 +714,9 @@
                     "type": "string"
                 },
                 "url": {
+                    "type": "string"
+                },
+                "icon_url": {
                     "type": "string"
                 },
                 "time_created": {
