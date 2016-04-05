@@ -20,7 +20,11 @@ function pleio_rest_created_river_event_handler($event, $object_type, $river) {
 function pleio_rest_created_river_async($river_id) {
     $ia = elgg_set_ignore_access(true);
 
-    $river = elgg_get_river(array('id' => $river_id));
+    $river = elgg_get_river(array(
+        'id' => $river_id,
+        'site_guid' => null
+    ));
+
     if (count($river) === 1) {
         $river = $river[0];
         $notHandler = new \PleioRest\Services\PushNotificationHandler();

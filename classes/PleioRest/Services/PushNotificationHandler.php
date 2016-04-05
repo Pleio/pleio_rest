@@ -7,7 +7,6 @@ class PushNotificationHandler {
         $this->factory = new \PleioRest\Services\ServiceFactory();
     }
 
-    // @todo: move to asynchronous RabbitMQ task
     public function fanOutNotifications($river) {
         foreach ($this->getSubscribers($river) as $subscriber) {
             $this->incrementNotificationCount($subscriber, $river);
