@@ -26,7 +26,7 @@ class Version {
             )
         );
 
-        $buildFile = dirname(__FILE__) . '/../../../../../.pleio-version';
+        $buildFile = $CONFIG->path . 'REVISION';
         if (file_exists($buildFile)) {
             $info['build'] = str_replace(PHP_EOL, '', file_get_contents($buildFile));
         }
