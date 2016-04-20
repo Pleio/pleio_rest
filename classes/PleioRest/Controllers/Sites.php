@@ -151,7 +151,7 @@ class Sites {
             'url' => $site->url,
             'membership' => $site instanceof Subsite ? $site->getMembership() : "open",
             'icon_url' => $site->getIconURL(),
-            'groups_unread_count' => $this->handler->getUnreadGroupsCount($user),
+            'groups_unread_count' => $this->handler->getUnreadGroupsCount($user, $site),
             'time_created' => date('c', $site->time_created) // ISO-8601
         );
     }
