@@ -109,7 +109,7 @@ class Members {
     private function parseUser(\ElggUser $user) {
         return array(
             'guid' => $user->guid,
-            'name' => html_entity_decode($user->name),
+            'name' => html_entity_decode($user->name, ENT_QUOTES),
             'icon_url' => $user->getIconURL(),
             'url' => $user->getURL()
         );

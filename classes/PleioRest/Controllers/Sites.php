@@ -147,7 +147,7 @@ class Sites {
 
         return array(
             'guid' => $site->guid,
-            'name' => html_entity_decode($site->name),
+            'name' => html_entity_decode($site->name, ENT_QUOTES),
             'url' => $site->url,
             'membership' => $site instanceof Subsite ? $site->getMembership() : "open",
             'icon_url' => $site->getIconURL(),

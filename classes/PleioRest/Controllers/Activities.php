@@ -152,16 +152,16 @@ class Activities {
         $object = get_entity($activity->object_guid);
 
         if ($object instanceof \ElggWire) {
-            $objectTitle = html_entity_decode($object->description);
+            $objectTitle = html_entity_decode($object->description, ENT_QUOTES);
         } else {
-            $objectTitle = html_entity_decode($object->title);
+            $objectTitle = html_entity_decode($object->title, ENT_QUOTES);
         }
 
         return array(
             'id' => $activity->id,
             'subject' => array(
                 'guid' => $activity->subject_guid,
-                'name' => html_entity_decode($subject->name),
+                'name' => html_entity_decode($subject->name, ENT_QUOTES),
                 'icon_url' => $subject->getIconURL()
             ),
             'action_type' => $activity->action_type,
