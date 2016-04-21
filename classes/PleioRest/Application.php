@@ -61,7 +61,7 @@ use \PleioRest\JsonRenderer as JsonRenderer;
 
 class Application {
     public function run() {
-        $app = new \Slim\App(['settings' => ['displayErrorDetails' => true]]);
+        $app = new \Slim\App(['settings' => ['displayErrorDetails' => false]]);
 
         $app->add(new AuthenticationMiddleware());
 
