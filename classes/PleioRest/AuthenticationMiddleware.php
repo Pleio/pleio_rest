@@ -21,7 +21,12 @@ class AuthenticationMiddleware {
 
         if (!$server->verifyResourceRequest(\OAuth2\Request::createFromGlobals())) {
             $response = $response->withStatus(403);
-            return $response;
+            $response = $response->withHeader('Content-type', 'application/json');
+            return $response->write(json_encode(array(
+                'status' => 403,
+                'error' => 'invalid_access_token',
+                'pretty_error' => 'You did not supply an OAuth access token or the token is invalid.'
+            ), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         }
 
         $token = $server->getAccessTokenData(\OAuth2\Request::createFromGlobals());
@@ -29,12 +34,22 @@ class AuthenticationMiddleware {
 
         if (!$user) {
             $response = $response->withStatus(403);
-            return $response;
+            $response = $response->withHeader('Content-type', 'application/json');
+            return $response->write(json_encode(array(
+                'status' => 403,
+                'error' => 'invalid_access_token',
+                'pretty_error' => 'You did not supply an OAuth access token or the token is invalid.'
+            ), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         }
 
         if (!login($user)) {
             $response = $response->withStatus(403);
-            return $response;
+            $response = $response->withHeader('Content-type', 'application/json');
+            return $response->write(json_encode(array(
+                'status' => 403,
+                'error' => 'could_not_login',
+                'pretty_error' => 'Could not login the user associated with this token. Probably the account is banned.'
+            ), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         }
 
         $response = $next($request, $response);

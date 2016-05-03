@@ -246,6 +246,84 @@
                 ]
             }
         },
+        "/api/groups/{guid}/files": {
+            "get": {
+                "tags": [
+                    "files"
+                ],
+                "summary": "Find files and folders in a specific group.",
+                "description": "Find files and folders from a specific group.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "guid",
+                        "in": "path",
+                        "description": "The guid of the specific group",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "container_guid",
+                        "in": "query",
+                        "description": "Fetch the elements of a subfolder with this guid",
+                        "required": false,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "default": 0
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Offset the results by",
+                        "required": false,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "default": 0
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit the results by",
+                        "required": false,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "default": 20
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesful operation.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/FileFolder"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Could not find the requested group."
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "all"
+                        ]
+                    }
+                ]
+            }
+        },
         "/api/groups/mine": {
             "get": {
                 "tags": [
@@ -553,6 +631,65 @@
                 ]
             }
         },
+        "/api/users/me/login_token": {
+            "get": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Login the user by single-use token and redirect to the requested page.",
+                "description": "Login the user by token and redirect to the requested page.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "user_guid",
+                        "in": "query",
+                        "description": "The guid of the user",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "redirect_url",
+                        "in": "query",
+                        "description": "The URL to redirect after login (only on the same host)",
+                        "required": false,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "token",
+                        "in": "query",
+                        "description": "The secret single-use token",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "301": {
+                        "description": "Succesful operation."
+                    },
+                    "403": {
+                        "description": "Invalid or expired token."
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "all"
+                        ]
+                    }
+                ]
+            }
+        },
         "/api/users/me/register_push": {
             "post": {
                 "tags": [
@@ -724,6 +861,31 @@
                 }
             }
         },
+        "FileFolder": {
+            "required": [
+                "guid",
+                "subtype",
+                "title"
+            ],
+            "properties": {
+                "guid": {
+                    "type": "integer"
+                },
+                "subtype": {
+                    "type": "string",
+                    "enum": [
+                        "file",
+                        "folder"
+                    ]
+                },
+                "title": {
+                    "type": "string"
+                },
+                "time_created": {
+                    "type": "string"
+                }
+            }
+        },
         "Group": {
             "required": [
                 "guid",
@@ -843,6 +1005,10 @@
         {
             "name": "members",
             "description": "Retrieve a list of members."
+        },
+        {
+            "name": "files",
+            "description": "Retrieve a list of files and folders."
         },
         {
             "name": "version",

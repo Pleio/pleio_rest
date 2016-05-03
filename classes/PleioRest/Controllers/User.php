@@ -88,7 +88,7 @@ class User {
       *     @SWG\Response(
       *         response=301,
       *         description="Succesful operation."
-      *     )
+      *     ),
       *     @SWG\Response(
       *         response=403,
       *         description="Invalid or expired token."

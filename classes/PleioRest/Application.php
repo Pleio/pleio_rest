@@ -47,6 +47,10 @@ namespace PleioRest;
  *   description="Retrieve a list of members."
  * )
  * @SWG\Tag(
+ *   name="files",
+ *   description="Retrieve a list of files and folders."
+ * )
+ * @SWG\Tag(
  *   name="version",
  *   description="Retrieve API version information.",
  * )
@@ -61,8 +65,38 @@ use \PleioRest\JsonRenderer as JsonRenderer;
 
 class Application {
     public function run() {
-        $app = new \Slim\App(['settings' => ['displayErrorDetails' => false]]);
+        $configuration = [
+            'settings' => [
+                'displayErrorDetails' => false,
+            ],
+        ];
 
+        $c = new \Slim\Container($configuration);
+        $c['notFoundHandler'] = function($c) {
+            return function ($request, $response, $exception) use ($c) {
+                return $c['response']->withStatus(404)
+                                     ->withHeader('Content-type', 'application/json')
+                                     ->write(json_encode(array(
+                                        'status' => 404,
+                                        'error' => 'not_found',
+                                        'pretty_error' => 'Could not find the specified endpoint.'
+                                    ), JSON_PRETTY_PRINT));
+            };
+        };
+
+        $c['errorHandler'] = function($c) {
+            return function ($request, $response, $exception) use ($c) {
+                return $c['response']->withStatus(500)
+                                     ->withHeader('Content-type', 'application/json')
+                                     ->write(json_encode(array(
+                                        'status' => 404,
+                                        'error' => 'internal_error',
+                                        'pretty_error' => 'An internal error has occured, please contact the site administrator.'
+                                    ), JSON_PRETTY_PRINT));
+            };
+        };
+
+        $app = new \Slim\App($c);
         $app->add(new AuthenticationMiddleware());
 
         $app->post('/oauth/v2/token', 'PleioRest\Controllers\Authentication::getToken');
@@ -86,6 +120,7 @@ class Application {
 
         $app->get('/api/groups/{guid}/events', 'PleioRest\Controllers\Events:getGroup');
         $app->get('/api/groups/{guid}/members', 'PleioRest\Controllers\Members:getGroup');
+        $app->get('/api/groups/{guid}/files', 'PleioRest\Controllers\Files:getGroup');
 
         $app->run();
     }
