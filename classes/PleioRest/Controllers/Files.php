@@ -73,45 +73,71 @@ class Files {
         $limit = (int) $params['limit'];
         $offset = (int) $params['offset'];
         $container_guid = (int) $params['container_guid'];
+        $dbprefix = elgg_get_config('dbprefix');
 
-        if (!$limit | $limit < 0 | $limit > 50) {
+        if (!$limit | $limit < 0 | $limit > 100) {
             $limit = 20;
         }
 
-        $dbprefix = elgg_get_config("dbprefix");
-        $parent_guid = get_metastring_id('parent_guid');
-
         $options = array(
             'type' => 'object',
-            'subtypes' => array('file', 'folder'),
-            'offset' => $offset,
-            'limit' => $limit,
+            'subtype' => 'folder',
             'container_guid' => $group->guid,
-            'joins' => array(
-                "LEFT JOIN {$dbprefix}objects_entity oe ON e.guid = oe.guid",
-                "LEFT JOIN {$dbprefix}metadata md ON e.guid = md.entity_guid AND md.name_id = {$parent_guid}",
-                "LEFT JOIN {$dbprefix}metastrings msv ON md.value_id = msv.id",
-                "LEFT JOIN {$dbprefix}entity_relationships r ON e.guid = r.guid_two AND r.relationship = 'folder_of'"
+            'limit' => $limit,
+            'offset' => $offset,
+            'metadata_name_value_pairs' => array(
+                'name' => 'parent_guid',
+                'value' => $container_guid ? $container_guid : 0
             ),
-            'order_by' => 'e.subtype DESC, oe.title'
+            'joins' => array(
+                "LEFT JOIN {$dbprefix}objects_entity oe ON e.guid = oe.guid"
+            ),
+            'order_by' => 'oe.title'
         );
 
-        $file = get_subtype_id('object', 'file');
-        $folder = get_subtype_id('object', 'folder');
-
-        if (!$container_guid) {
-            $options['wheres'] = "(e.subtype = '{$file}' AND r.guid_one IS NULL) OR (e.subtype = '{$folder}' AND msv.string = '0')";
-        } else {
-            $options['wheres'] = "(e.subtype = '{$file}' AND r.guid_one = '{$container_guid}') OR (e.subtype = '{$folder}' AND msv.string = '{$container_guid}')";
-        }
-
-        $entities = array();
-        foreach (elgg_get_entities($options) as $entity) {
-            $entities[] = $this->parseObject($entity);
+        $folders = elgg_get_entities_from_metadata($options);
+        if (!$folders) {
+            $folders = array();
         }
 
         $options['count'] = true;
         $total = elgg_get_entities_from_metadata($options);
+
+        $options = array(
+            'type' => 'object',
+            'subtype' => 'file',
+            'container_guid' => $group->guid,
+            'limit' => $limit - count($folders),
+            'offset' => max(0, $offset - $total),
+            'joins' => array(
+                "LEFT JOIN {$dbprefix}objects_entity oe ON e.guid = oe.guid",
+                "LEFT JOIN {$dbprefix}entity_relationships r ON e.guid = r.guid_two AND r.relationship = 'folder_of'"
+            ),
+            'order_by' => 'oe.title'
+        );
+
+        if ($container_guid) {
+            $options['wheres'] = "r.guid_one = '{$container_guid}'";
+        } else {
+            $options['wheres'] = "r.guid_one IS NULL";
+        }
+
+        if ($limit - count($folders) > 0) {
+            $files = elgg_get_entities($options);
+            if (!$files) {
+                $files = array();
+            }
+        } else {
+            $files = array();
+        }
+
+        $options['count'] = true;
+        $total += elgg_get_entities_from_metadata($options);
+
+        $entities = array();
+        foreach (array_merge($folders, $files) as $entity) {
+            $entities[] = $this->parseObject($entity);
+        }
 
         $response = $response->withHeader('Content-type', 'application/json');
         return $response->write(json_encode(array(
