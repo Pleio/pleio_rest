@@ -704,7 +704,7 @@
                     {
                         "name": "service",
                         "in": "query",
-                        "description": "The service (gcm or apns)",
+                        "description": "The service (gcm, apns or mpns)",
                         "required": true,
                         "type": "string",
                         "items": {
@@ -724,7 +724,7 @@
                     {
                         "name": "token",
                         "in": "query",
-                        "description": "The token received from Google Cloud Messaging (GCM) or Apple Push Notification Gateway Service (APNS).",
+                        "description": "The token received from Google Cloud Messaging (GCM), Apple Push Notification Gateway Service (APNS) or the URI from Microsoft Push Notification Service (MPNS).",
                         "required": true,
                         "type": "string",
                         "items": {
@@ -760,7 +760,7 @@
                     {
                         "name": "service",
                         "in": "query",
-                        "description": "The service (gcm or apns)",
+                        "description": "The service (gcm, apns or mpns)",
                         "required": true,
                         "type": "string",
                         "items": {
@@ -770,7 +770,7 @@
                     {
                         "name": "device_id",
                         "in": "query",
-                        "description": "The token received from Google Cloud Messaging (GCM) or Apple Push Notification Gateway Service (APNS).",
+                        "description": "The unique device ID registered with register_push.",
                         "required": true,
                         "type": "string",
                         "items": {

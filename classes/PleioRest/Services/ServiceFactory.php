@@ -15,6 +15,8 @@ class ServiceFactory {
             if ($client->apns_cert) {
                 $services[$client->client_id]['apns'] = new ApnsPush($client->apns_cert);
             }
+
+            $services[$client->client_id]['mpns'] = new MpnsPush();
         }
 
         $this->services = $services;

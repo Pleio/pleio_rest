@@ -10,11 +10,11 @@ class PushNotificationHandler {
     public function fanOutNotifications($river) {
         foreach ($this->getSubscribers($river) as $subscriber) {
             $this->incrementNotificationCount($subscriber, $river);
-            $this->sendNotification($subscriber);
+            $this->sendNotification($subscriber, $river);
         }
     }
 
-    public function sendNotification($user) {
+    public function sendNotification($user, $river) {
         $unreadGroupsCount = $this->getUnreadGroupsCount($user);
         if (!$unreadGroupsCount) {
             return true;
@@ -23,14 +23,44 @@ class PushNotificationHandler {
         $subscriptions = $this->getSubscriptions($user);
         foreach ($subscriptions as $subscription) {
             $service = $this->factory->getService($subscription);
+
             if ($service) {
                 $response = $service->push($subscription, array(
+                    'title' => $this->generateTitle($river),
                     'count' => $unreadGroupsCount
                 ));
 
                 // @todo: housekeeping, purge old tokens
             }
         }
+    }
+
+    public function generateTitle($river) {
+        $subject = $river->getSubjectEntity();
+        $object = $river->getObjectEntity();
+        if ($object) {
+            $container = $object->getContainerEntity();
+        }
+
+        switch($river->action_type) {
+            case "create":
+                $title = $subject->name . " heeft " . $object->title . " geplaatst in " . $container->name;
+                break;
+            case "update":
+                $title = $subject->name . " heeft " . $object->title . " vernieuwd in " . $container->name;
+                break;
+            case "join":
+                $title = $subject->name . " is lid geworden van " . $object->title;
+                break;
+            case "reply":
+                $title = $subject->name . " heeft gereageerd op " . $object->title;
+                break;
+            case default:
+                $title = "";
+                break;
+        }
+
+        return $title;
     }
 
     public function getSubscribers($river) {
@@ -93,7 +123,7 @@ class PushNotificationHandler {
 
     public function getUnreadGroupsCount($user, $site = null) {
         if ($site) {
-            $row = get_data_row("SELECT COUNT(*) AS count FROM {$this->dbprefix}push_notifications_count WHERE user_guid = {$user->guid} AND site_guid = {$site->guid}");
+            $row = get_data_row("SELECT SUM(count) AS count FROM {$this->dbprefix}push_notifications_count WHERE user_guid = {$user->guid} AND site_guid = {$site->guid}");
         } else {
             $row = get_data_row("SELECT SUM(count) AS count FROM {$this->dbprefix}push_notifications_count WHERE user_guid = {$user->guid} GROUP BY user_guid");
         }

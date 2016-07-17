@@ -166,7 +166,7 @@ class User {
      *     @SWG\Parameter(
      *         name="service",
      *         in="query",
-     *         description="The service (gcm or apns)",
+     *         description="The service (gcm, apns or mpns)",
      *         required=true,
      *         type="string",
      *         @SWG\Items(type="string")
@@ -182,7 +182,7 @@ class User {
      *     @SWG\Parameter(
      *         name="token",
      *         in="query",
-     *         description="The token received from Google Cloud Messaging (GCM) or Apple Push Notification Gateway Service (APNS).",
+     *         description="The token received from Google Cloud Messaging (GCM), Apple Push Notification Gateway Service (APNS) or the URI from Microsoft Push Notification Service (MPNS).",
      *         required=true,
      *         type="string",
      *         @SWG\Items(type="string")
@@ -204,7 +204,7 @@ class User {
         $token = $vars['token'];
         $service = $vars['service'];
 
-        if (!in_array($service, array('gcm', 'apns'))) {
+        if (!in_array($service, array('gcm', 'apns', 'mpns'))) {
             return $response->withStatus(404);
         }
 
@@ -223,7 +223,7 @@ class User {
      *     @SWG\Parameter(
      *         name="service",
      *         in="query",
-     *         description="The service (gcm or apns)",
+     *         description="The service (gcm, apns or mpns)",
      *         required=true,
      *         type="string",
      *         @SWG\Items(type="string")
@@ -231,7 +231,7 @@ class User {
      *     @SWG\Parameter(
      *         name="device_id",
      *         in="query",
-     *         description="The token received from Google Cloud Messaging (GCM) or Apple Push Notification Gateway Service (APNS).",
+     *         description="The unique device ID registered with register_push.",
      *         required=true,
      *         type="string",
      *         @SWG\Items(type="string")
