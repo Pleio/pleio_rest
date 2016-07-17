@@ -40,22 +40,27 @@ class PushNotificationHandler {
         $object = $river->getObjectEntity();
         if ($object) {
             $container = $object->getContainerEntity();
+            if ($object->title) {
+                $objectTitle = $object->title;
+            } else {
+                $objectTitle = elgg_get_excerpt($object->description, 60);
+            }
         }
 
         switch($river->action_type) {
             case "create":
-                $title = $subject->name . " heeft " . $object->title . " geplaatst in " . $container->name;
+                $title = $subject->name . " heeft " . $objectTitle . " geplaatst in " . $container->name;
                 break;
             case "update":
-                $title = $subject->name . " heeft " . $object->title . " vernieuwd in " . $container->name;
+                $title = $subject->name . " heeft " . $objectTitle . " vernieuwd in " . $container->name;
                 break;
             case "join":
-                $title = $subject->name . " is lid geworden van " . $object->title;
+                $title = $subject->name . " is lid geworden van " . $objectTitle;
                 break;
             case "reply":
-                $title = $subject->name . " heeft gereageerd op " . $object->title;
+                $title = $subject->name . " heeft gereageerd op " . $objectTitle;
                 break;
-            case default:
+            default:
                 $title = "";
                 break;
         }
@@ -95,8 +100,9 @@ class PushNotificationHandler {
         // remove old tokens from the user with the specific device
         delete_data("DELETE FROM {$this->dbprefix}push_notifications_subscriptions WHERE client_id = \"{$client_id}\" AND service = \"{$service}\" AND device_id = \"{$device_id}\" AND user_guid = \"{$user->guid}\"");
 
-        // remove subscription of the specific device_id and token (user change)
-        delete_data("DELETE FROM {$this->dbprefix}push_notifications_subscriptions WHERE client_id = \"{$client_id}\" AND service = \"{$service}\" AND device_id = \"{$device_id}\" AND token = \"{$token}\"");
+        // remove subscription of the specific token (user change)
+        delete_data("DELETE FROM {$this->dbprefix}push_notifications_subscriptions WHERE client_id = \"{$client_id}\" AND service = \"{$service}\" AND token = \"{$token}\"");
+
         return insert_data("INSERT INTO {$this->dbprefix}push_notifications_subscriptions (user_guid, client_id, service, device_id, token) VALUES (\"{$user->guid}\", \"{$client_id}\", \"{$service}\", \"{$device_id}\", \"{$token}\")");
     }
 

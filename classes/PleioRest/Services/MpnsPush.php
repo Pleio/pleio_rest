@@ -2,7 +2,7 @@
 namespace PleioRest\Services;
 
 class MpnsPush implements PushInterface {
-    public function __construct($uri) {
+    public function __construct($key = null) {
         $this->key = $key;
 
         $ch = curl_init();
@@ -32,6 +32,11 @@ class MpnsPush implements PushInterface {
 
         curl_setopt($this->ch, CURLOPT_URL, $subscription->token);
         curl_setopt($this->ch, CURLOPT_POSTFIELDS, $msg);
+
+        echo "[MPNS] Sending " . $message['title'] . " (" . $message['count'] . ") to " . $subscription->token . PHP_EOL;
+
         $result = curl_exec($this->ch);
+
+        echo "[MPNS] Received " . $result . PHP_EOL;
     }
 }

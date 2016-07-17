@@ -35,8 +35,12 @@ class ApnsPush implements PushInterface {
         $expiry = time() + (3600*24*90); // keep alive for 90 days
         $payload = json_encode($body);
 
+        echo "[APNS] Sending " . $message['title'] . " (" . $message['count'] . ") to " . $subscription->token . PHP_EOL;
+
         $msg = chr(0) . pack('n', 32) . pack('H*', $subscription->token) . pack('n', strlen($payload)) . $payload;
-        $response = fwrite($this->fp, $msg);
+
+        fwrite($this->fp, $msg);
+        // @todo: process response
 
         return $response;
     }

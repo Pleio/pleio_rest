@@ -26,7 +26,11 @@ class GcmPush implements PushInterface {
             'data' => $message
         );
 
+        echo "[GCM] Sending " . $message['title'] . " (" . $message['count'] . ") to " . $subscription->token . PHP_EOL;
+
         curl_setopt($this->ch, CURLOPT_POSTFIELDS, json_encode($fields));
         $result = curl_exec($this->ch);
+
+        echo "[GCM] Received " . $result . PHP_EOL;
     }
 }
