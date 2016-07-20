@@ -704,7 +704,7 @@
                     {
                         "name": "service",
                         "in": "query",
-                        "description": "The service (gcm, apns or mpns)",
+                        "description": "The service (gcm, apns or wns)",
                         "required": true,
                         "type": "string",
                         "items": {
@@ -724,7 +724,7 @@
                     {
                         "name": "token",
                         "in": "query",
-                        "description": "The token received from Google Cloud Messaging (GCM), Apple Push Notification Gateway Service (APNS) or the URI from Microsoft Push Notification Service (MPNS).",
+                        "description": "The token received from Google Cloud Messaging (GCM), Apple Push Notification Gateway Service (APNS) or the full notification URL from Windows Notification Service (WNS).",
                         "required": true,
                         "type": "string",
                         "items": {
@@ -760,7 +760,7 @@
                     {
                         "name": "service",
                         "in": "query",
-                        "description": "The service (gcm, apns or mpns)",
+                        "description": "The service (gcm, apns or wns)",
                         "required": true,
                         "type": "string",
                         "items": {
