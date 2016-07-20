@@ -5,7 +5,7 @@ class ServiceFactory {
     public function __construct() {
         $services = array();
 
-        $clients = get_data("SELECT * FROM oauth_clients WHERE gcm_key IS NOT NULL OR apns_cert IS NOT NULL");
+        $clients = get_data("SELECT * FROM oauth_clients WHERE gcm_key IS NOT NULL OR apns_cert IS NOT NULL OR wns_key IS NOT NULL");
         foreach ($clients as $client) {
             $services[$client->client_id] = array();
 
@@ -16,7 +16,12 @@ class ServiceFactory {
                 $services[$client->client_id]['apns'] = new ApnsPush($client->apns_cert);
             }
 
-            $services[$client->client_id]['mpns'] = new MpnsPush(null);
+            if ($client->wns_key && $client->wns_secret) {
+                $services[$client->client_id]['wns'] = new WnsPush(array(
+                    'clientId' => $client->wns_key,
+                    'clientSecret' => $client->wns_secret
+                ));
+            }
         }
 
         $this->services = $services;
