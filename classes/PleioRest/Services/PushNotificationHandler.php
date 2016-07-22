@@ -41,9 +41,9 @@ class PushNotificationHandler {
         if ($object) {
             $container = $object->getContainerEntity();
             if ($object->title) {
-                $objectTitle = $object->title;
+                $objectTitle = html_entity_decode($object->title, ENT_QUOTES);
             } else {
-                $objectTitle = elgg_get_excerpt($object->description, 60);
+                $objectTitle = elgg_get_excerpt(html_entity_decode($object->description, ENT_QUOTES), 60);
             }
         }
 
