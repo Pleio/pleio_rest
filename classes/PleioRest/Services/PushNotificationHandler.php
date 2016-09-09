@@ -92,10 +92,10 @@ class PushNotificationHandler {
     }
 
     public function addSubscription(\ElggUser $user, $client_id, $service, $device_id, $token) {
-        $client_id = mysql_real_escape_string($client_id);
-        $service = mysql_real_escape_string($service);
-        $device_id = mysql_real_escape_string($device_id);
-        $token = mysql_real_escape_string($token);
+        $client_id = sanitize_string($client_id);
+        $service = sanitize_string($service);
+        $device_id = sanitize_string($device_id);
+        $token = sanitize_string($token);
 
         // remove old tokens from the user with the specific device
         delete_data("DELETE FROM {$this->dbprefix}push_notifications_subscriptions WHERE client_id = \"{$client_id}\" AND service = \"{$service}\" AND device_id = \"{$device_id}\" AND user_guid = \"{$user->guid}\"");
@@ -107,9 +107,9 @@ class PushNotificationHandler {
     }
 
     public function removeSubscription(\ElggUser $user, $client_id, $service, $device_id) {
-        $client_id = mysql_real_escape_string($client_id);
-        $service = mysql_real_escape_string($service);
-        $device_id = mysql_real_escape_string($device_id);
+        $client_id = sanitize_string($client_id);
+        $service = sanitize_string($service);
+        $device_id = sanitize_string($device_id);
         return delete_data("DELETE FROM {$this->dbprefix}push_notifications_subscriptions WHERE user_guid = \"{$user->guid}\" AND client_id = \"{$client_id}\" AND service = \"{$service}\" AND device_id = \"{$device_id}\"");
     }
 
