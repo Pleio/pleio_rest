@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS elgg_push_notifications_subscriptions (
     `client_id` varchar(100) NOT NULL,
     `service` enum('gcm','apns', 'wns') NOT NULL,
     `device_id` varchar(100) NOT NULL,
-    `token` varchar(100) NOT NULL,
+    `token` varchar(512) NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `token` (`service`, `token`)
 );

@@ -22,7 +22,7 @@ class GcmPush implements PushInterface {
 
     public function push($subscription, $message) {
         $fields = array(
-            'to' => array($subscription->token),
+            'to' => $subscription->token,
             'data' => $message
         );
 
