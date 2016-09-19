@@ -27,6 +27,7 @@ class PushNotificationHandler {
             if ($service) {
                 $response = $service->push($subscription, array(
                     'title' => $this->generateTitle($river),
+                    'river' => $river,
                     'count' => $unreadGroupsCount
                 ));
 

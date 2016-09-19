@@ -21,9 +21,23 @@ class GcmPush implements PushInterface {
     }
 
     public function push($subscription, $message) {
+        $river = $message['river'];
+        $object = $river->getObjectEntity();
+        if ($object) {
+            $site = get_entity($river->site_guid);
+            $group = $river->getContainerEntity();
+        }
+
         $fields = array(
             'to' => $subscription->token,
-            'data' => $message
+            'notification' => [
+                'body' => $message['title']
+            ],
+            'data' => [
+                'count' => $message['count'],
+                'site_guid' => $site ? $site->guid : 0,
+                'group_guid' => $group ? $group->guid : 0
+            ]
         );
 
         echo "[GCM] Sending " . $message['title'] . " (" . $message['count'] . ") to " . $subscription->token . PHP_EOL;
