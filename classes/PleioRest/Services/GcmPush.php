@@ -25,7 +25,7 @@ class GcmPush implements PushInterface {
         $object = $river->getObjectEntity();
         if ($object) {
             $site = get_entity($river->site_guid);
-            $group = $river->getContainerEntity();
+            $group = $object->getContainerEntity();
         }
 
         $fields = array(
