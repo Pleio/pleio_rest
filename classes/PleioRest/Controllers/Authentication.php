@@ -3,6 +3,35 @@ namespace PleioRest\Controllers;
 
 class Authentication {
 
+    public function authorize($request, $response, $args) {
+        $factory = new \PleioRest\AuthenticationServerFactory();
+        $server = $factory->getServer();
+
+        $authRequest = \OAuth2\Request::createFromGlobals();
+        $authResponse = new \OAuth2\Response();
+
+        if (!$server->validateAuthorizeRequest($authRequest, $authResponse)) {
+            $authResponse->send();
+        }
+
+        if (elgg_is_logged_in()) {
+            $server->handleAuthorizeRequest($authRequest, $authResponse, true, elgg_get_logged_in_user_guid());
+
+            $status = $authResponse->getStatusCode();
+            if ($status == 302) {
+                $response = $response->withStatus(302)->withHeader("Location", $authResponse->getHttpHeader("Location"));
+            } else {
+                $response = $response->write(json_encode($authResponse->getParameters(), JSON_PRETTY_PRINT));
+            }
+        } else {
+            $response = $response->withStatus(403)->write(json_encode([
+                "pretty_message" => "Not logged in"
+            ]));
+        }
+
+        return $response;
+    }
+
     /**
      * @SWG\Post(
      *     path="/oauth/v2/token",

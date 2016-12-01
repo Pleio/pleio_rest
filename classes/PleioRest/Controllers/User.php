@@ -5,6 +5,43 @@ class User {
 
     /**
      * @SWG\Post(
+     *     path="/api/users/me",
+     *     security={{"oauth2": {"all"}}},
+     *     tags={"user"},
+     *     summary="Get information of the resource owner.",
+     *     description="Get information of the resource owner.",
+     *     produces={"application/json"},
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Succesful operation."
+     *     )
+     * )
+     */
+    public function me($request, $response, $args) {
+        $site = elgg_get_site_entity();
+        $user = elgg_get_logged_in_user_entity();
+
+        if (!$user) {
+            throw new Exception("Could not find the logged in user.");
+        }
+
+        $json = array(
+            "guid" => $user->guid,
+            "username" => $user->username,
+            "name" => $user->name,
+            "email" => $user->email,
+            "icon" => "{$site->url}/mod/profile/icondirect.php?guid={$user->guid}&joindate={$user->time_created}",
+            "url" => $user->getURL(),
+            "language" => $user->language,
+            "isAdmin" => subsite_manager_is_superadmin_logged_in()
+        );
+
+        $response = $response->withHeader("Content-type", "application/json");
+        return $response->write(json_encode($json, JSON_PRETTY_PRINT));
+    }
+
+    /**
+     * @SWG\Post(
      *     path="/api/users/me/generate_token",
      *     security={{"oauth2": {"all"}}},
      *     tags={"user"},

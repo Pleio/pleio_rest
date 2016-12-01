@@ -73,7 +73,7 @@ class Application {
 
         $c = new \Slim\Container($configuration);
         $c['notFoundHandler'] = function($c) {
-            return function ($request, $response, $exception) use ($c) {
+            return function ($request, $response) use ($c) {
                 return $c['response']->withStatus(404)
                                      ->withHeader('Content-type', 'application/json')
                                      ->write(json_encode(array(
@@ -85,7 +85,7 @@ class Application {
         };
 
         $c['errorHandler'] = function($c) {
-            return function ($request, $response, $exception) use ($c) {
+            return function ($request, $response) use ($c) {
                 return $c['response']->withStatus(500)
                                      ->withHeader('Content-type', 'application/json')
                                      ->write(json_encode(array(
@@ -99,7 +99,10 @@ class Application {
         $app = new \Slim\App($c);
         $app->add(new AuthenticationMiddleware());
 
+        $app->get('/oauth/v2/authorize', 'PleioRest\Controllers\Authentication::authorize');
         $app->post('/oauth/v2/token', 'PleioRest\Controllers\Authentication::getToken');
+
+        $app->get('/api/users/me', 'PleioRest\Controllers\User:me');
         $app->post('/api/users/me/register_push', 'PleioRest\Controllers\User:registerPush');
         $app->post('/api/users/me/deregister_push', 'PleioRest\Controllers\User:deregisterPush');
         $app->post('/api/users/me/generate_token', 'PleioRest\Controllers\User:generateToken');
