@@ -24,9 +24,10 @@ class Authentication {
                 $response = $response->write(json_encode($authResponse->getParameters(), JSON_PRETTY_PRINT));
             }
         } else {
-            $response = $response->withStatus(403)->write(json_encode([
-                "pretty_message" => "Not logged in"
-            ]));
+            $uri = $request->getUri();
+            $scheme = $uri->getScheme();
+            $host = $uri->getHost();
+            forward("/login?returnto=" . urlencode("${scheme}://${host}" . $_SERVER["REQUEST_URI"]));
         }
 
         return $response;
