@@ -246,7 +246,7 @@
                 ]
             }
         },
-        "/api/groups/{guid}/files": {
+        "/api/groups/{group_guid}/files": {
             "get": {
                 "tags": [
                     "files"
@@ -258,7 +258,7 @@
                 ],
                 "parameters": [
                     {
-                        "name": "guid",
+                        "name": "group_guid",
                         "in": "path",
                         "description": "The guid of the specific group",
                         "required": true,
@@ -313,6 +313,107 @@
                     },
                     "404": {
                         "description": "Could not find the requested group."
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "all"
+                        ]
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "files"
+                ],
+                "summary": "Create a new file or folder in a specific group.",
+                "description": "Create a new file or folder in a specific group.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "group_guid",
+                        "in": "path",
+                        "description": "The guid of the specific group",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "container_guid",
+                        "in": "query",
+                        "description": "Create the new element in a subfolder with this guid",
+                        "required": false,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "default": 0
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesful operation."
+                    },
+                    "404": {
+                        "description": "Could not find the requested group or subfolder."
+                    },
+                    "403": {
+                        "description": "Could not create file or folder due to restricted permissions."
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "all"
+                        ]
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "files"
+                ],
+                "summary": "Remove a specific file or folder in a group.",
+                "description": "Remove a specific file or folder in a group.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "group_guid",
+                        "in": "path",
+                        "description": "The guid of the specific group",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "guid",
+                        "in": "query",
+                        "description": "The guid of the object to be deleted",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesful operation."
+                    },
+                    "404": {
+                        "description": "Could not find the group or item."
+                    },
+                    "403": {
+                        "description": "Could not delete file or folder due to restricted permissions."
                     }
                 },
                 "security": [
@@ -596,6 +697,30 @@
                                 "$ref": "#/definitions/Site"
                             }
                         }
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "all"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/api/users/me": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Get information of the resource owner.",
+                "description": "Get information of the resource owner.",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesful operation."
                     }
                 },
                 "security": [
