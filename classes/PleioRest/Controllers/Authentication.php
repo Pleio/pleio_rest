@@ -9,6 +9,7 @@ class Authentication {
             return $response->wihStatus(404)->write(json_encode([
                 "pretty_message" => "Could not find endpoint"
             ]));
+        }
 
         $idp = get_input("idp");
         $is_master = elgg_get_plugin_setting("is_master", "pleio_rest");
@@ -219,7 +220,7 @@ class Authentication {
     public function getToken($request, $response, $args) {
         global $CONFIG;
         if ($CONFIG->pleio) {
-            return $resopnse->wihStatus(404)->write(json_encode([
+            return $response->wihStatus(404)->write(json_encode([
                 "pretty_message" => "Could not find endpoint"
             ]));
         }
