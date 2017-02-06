@@ -4,6 +4,13 @@ namespace PleioRest\Controllers;
 class Authentication {
 
     public function authorize($request, $response, $args) {
+        global $CONFIG;
+        if ($CONFIG->pleio) {
+            return $resopnse->wihStatus(404)->write(json_encode([
+                "pretty_message" => "Could not find endpoint"
+            ]));
+        }
+
         $factory = new \PleioRest\AuthenticationServerFactory();
         $server = $factory->getServer();
 
@@ -78,6 +85,13 @@ class Authentication {
      * )
      */
     public function getToken($request, $response, $args) {
+        global $CONFIG;
+        if ($CONFIG->pleio) {
+            return $resopnse->wihStatus(404)->write(json_encode([
+                "pretty_message" => "Could not find endpoint"
+            ]));
+        }
+
         $factory = new \PleioRest\AuthenticationServerFactory();
         $server = $factory->getServer();
 

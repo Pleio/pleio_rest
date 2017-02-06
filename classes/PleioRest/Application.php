@@ -67,7 +67,7 @@ class Application {
     public function run() {
         $configuration = [
             'settings' => [
-                'displayErrorDetails' => false,
+                'displayErrorDetails' => true,
             ],
         ];
 
@@ -84,7 +84,7 @@ class Application {
             };
         };
 
-        $c['errorHandler'] = function($c) {
+        /*$c['errorHandler'] = function($c) {
             return function ($request, $response) use ($c) {
                 return $c['response']->withStatus(500)
                                      ->withHeader('Content-type', 'application/json')
@@ -94,7 +94,7 @@ class Application {
                                         'pretty_error' => 'An internal error has occured, please contact the site administrator.'
                                     ), JSON_PRETTY_PRINT));
             };
-        };
+        };*/
 
         $app = new \Slim\App($c);
         $app->add(new AuthenticationMiddleware());
