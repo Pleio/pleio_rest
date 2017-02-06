@@ -89,7 +89,7 @@ class Application {
                 return $c['response']->withStatus(500)
                                      ->withHeader('Content-type', 'application/json')
                                      ->write(json_encode(array(
-                                        'status' => 404,
+                                        'status' => 500,
                                         'error' => 'internal_error',
                                         'pretty_error' => 'An internal error has occured, please contact the site administrator.'
                                     ), JSON_PRETTY_PRINT));

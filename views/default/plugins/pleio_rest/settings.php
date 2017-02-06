@@ -1,12 +1,13 @@
 <?php
 $plugin = $vars["entity"];
 
-/*echo "<div>";
-echo elgg_echo("pleio_rest:admin:gcm_key");
-echo elgg_view("input/text", array("name" => "params[gcm_key]", "value" => $plugin->gcm_key));
-echo "</div>";
-
 echo "<div>";
-echo elgg_echo("pleio_rest:admin:apns_cert");
-echo elgg_view("input/plaintext", array("name" => "params[apns_cert]", "value" => $plugin->apns_cert));
-echo "</div>";*/
+echo elgg_view("input/dropdown", array(
+    "name" => "params[is_master]",
+    "value" => $plugin->is_master,
+    "options_values" => [
+        "no" => "Slave",
+        "yes" => "Master"
+    ]));
+echo elgg_echo("pleio_rest:master_slave");
+echo "</div>";
