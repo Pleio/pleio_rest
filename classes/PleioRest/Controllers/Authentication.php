@@ -12,12 +12,6 @@ class Authentication {
         }
 
         $idp = get_input("idp");
-        $is_master = elgg_get_plugin_setting("is_master", "pleio_rest");
-
-        if ($is_master !== "yes") {
-            throw new Exception("Could not authorize this user, as the server is not a master.");
-        }
-
         $factory = new \PleioRest\AuthenticationServerFactory();
         $server = $factory->getServer();
 
