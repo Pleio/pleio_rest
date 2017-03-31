@@ -67,7 +67,7 @@ class Application {
     public function run() {
         $configuration = [
             'settings' => [
-                'displayErrorDetails' => false,
+                'displayErrorDetails' => true,
             ],
         ];
 

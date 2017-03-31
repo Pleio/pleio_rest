@@ -4,13 +4,14 @@ namespace PleioRest\Controllers;
 class Authentication {
 
     public function authorize($request, $response, $args) {
-        $idp = get_input("idp");
-        $is_master = elgg_get_plugin_setting("is_master", "pleio_rest");
-
-        if ($is_master !== "yes") {
-            throw new Exception("Could not authorize this user, as the server is not a master.");
+        global $CONFIG;
+        if ($CONFIG->pleio) {
+            return $response->wihStatus(404)->write(json_encode([
+                "pretty_message" => "Could not find endpoint"
+            ]));
         }
 
+        $idp = get_input("idp");
         $factory = new \PleioRest\AuthenticationServerFactory();
         $server = $factory->getServer();
 
@@ -208,6 +209,13 @@ class Authentication {
      * )
      */
     public function getToken($request, $response, $args) {
+        global $CONFIG;
+        if ($CONFIG->pleio) {
+            return $response->wihStatus(404)->write(json_encode([
+                "pretty_message" => "Could not find endpoint"
+            ]));
+        }
+
         $factory = new \PleioRest\AuthenticationServerFactory();
         $server = $factory->getServer();
 
