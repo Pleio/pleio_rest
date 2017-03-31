@@ -25,10 +25,7 @@ class Authentication {
             if ($idp) {
                 $user = Authentication::handleSAMLAuthorization();
             } else {
-                $uri = $request->getUri();
-                $scheme = $uri->getScheme();
-                $host = $uri->getHost();
-                forward("/login?returnto=" . urlencode("${scheme}://${host}" . $_SERVER["REQUEST_URI"]));
+                forward("/login?returnto=" . urlencode(full_url()));
             }
         } else {
             $user = elgg_get_logged_in_user_entity();
