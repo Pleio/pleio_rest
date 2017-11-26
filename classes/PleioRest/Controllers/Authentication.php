@@ -11,7 +11,10 @@ class Authentication {
             ]));
         }
 
+        $method = get_input("method");
         $idp = get_input("idp");
+
+
         $factory = new \PleioRest\AuthenticationServerFactory();
         $server = $factory->getServer();
 
@@ -25,6 +28,8 @@ class Authentication {
         if (!elgg_is_logged_in()) {
             if ($idp) {
                 $user = Authentication::handleSAMLAuthorization();
+            } elseif ($method === "register") {
+                forward("/register?returnto=" . urlencode(full_url()));
             } else {
                 forward("/login?returnto=" . urlencode(full_url()));
             }
