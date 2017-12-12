@@ -54,6 +54,8 @@ class Authentication {
     }
 
     public function handleSAMLAuthorization() {
+        $site = elgg_get_site_entity();
+
         $source = get_input("idp");
         $label = simplesaml_get_source_label($source);
         if (!simplesaml_is_enabled_source($source)) {
@@ -77,12 +79,35 @@ class Authentication {
             $user = Authentication::findUserByEmail($requiredAttributes["email"]);
             if ($user) {
                 simplesaml_link_user($user, $source, $requiredAttributes["externalId"]);
-            }
-        }
 
-        if (!$user) {
-            $user = Authentication::registerUserBySAML($requiredAttributes);
-            simplesaml_link_user($user, $source, $requiredAttributes["externalId"]);
+                $result = elgg_send_email(
+                    $site->email ? $site->email : "noreply@" . get_site_domain($site->guid),
+                    $user->email,
+                    elgg_echo("pleio_rest:email:account_linked:subject"),
+                    elgg_echo("pleio_rest:email:account_linked:body", [
+                        $user->name,
+                        $requiredAttributes["externalId"]
+                    ])
+                );
+
+            } else {
+                $user = Authentication::registerUserBySAML($requiredAttributes);
+                simplesaml_link_user($user, $source, $requiredAttributes["externalId"]);
+
+                $code = generate_random_cleartext_password();
+                $user->setPrivateSetting("passwd_conf_code", $code);
+                $user->setPrivateSetting("passwd_conf_expiry", time() + 3600*48);
+
+                $result = elgg_send_email(
+                    $site->email ? $site->email : "noreply@" . get_site_domain($site->guid),
+                    $user->email,
+                    elgg_echo("pleio_rest:email:account_created:subject"),
+                    elgg_echo("pleio_rest:email:account_created:body", [
+                        $user->name,
+                        "{$site->url}resetpassword?u={$user->guid}&c={$code}"
+                    ])
+                );
+            }
         }
 
         if (!elgg_get_user_validation_status($user->guid)) {
