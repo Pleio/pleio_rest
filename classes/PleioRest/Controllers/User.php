@@ -42,6 +42,112 @@ class User {
 
     /**
      * @SWG\Post(
+     *     path="/api/users/me/change_avatar",
+     *     security={{"oauth2": {"all"}}},
+     *     tags={"user"},
+     *     summary="Change the avatar for the user.",
+     *     description="Change the avatar for the user.",
+     *     produces={"application/json"},
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Succesful operation."
+     *     )
+     * )
+     */
+     public function changeAvatar($request, $response, $args) {
+        $user = elgg_get_logged_in_user_entity();
+
+        if (!$user) {
+            throw new Exception("could_not_find_user");
+        }
+
+        if ($_FILES['avatar']['error'] != 0) {
+            throw new Exception("could_not_get_file");
+        }
+
+        $files = array();
+        foreach (elgg_get_config('icon_sizes') as $name => $size_info) {
+            $resized = get_resized_image_from_uploaded_file('avatar', $size_info['w'], $size_info['h'], $size_info['square'], $size_info['upscale']);
+
+            if ($resized) {
+                //@todo Make these actual entities.  See exts #348.
+                $file = new \ElggFile();
+                $file->owner_guid = $user->guid;
+                $file->setFilename("profile/{$user->guid}{$name}.jpg");
+                $file->open('write');
+                $file->write($resized);
+                $file->close();
+                $files[] = $file;
+            } else {
+                // cleanup on fail
+                foreach ($files as $file) {
+                    $file->delete();
+                }
+
+                throw new Exception("could_not_save");
+            }
+        }
+
+        $user->x1 = 0;
+        $user->x2 = 0;
+        $user->y1 = 0;
+        $user->y2 = 0;
+
+        $user->icontime = time();
+        $user->save();
+
+        $response = $response->withHeader('Content-type', 'application/json');
+        $json = [ 'success' => true ];
+        return $response->write(json_encode($json, JSON_PRETTY_PRINT));
+     }
+
+    /**
+     * @SWG\Post(
+     *     path="/api/users/me/remove_avatar",
+     *     security={{"oauth2": {"all"}}},
+     *     tags={"user"},
+     *     summary="Remove the avatar for the user.",
+     *     description="Remove the avatar for the user.",
+     *     produces={"application/json"},
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Succesful operation."
+     *     )
+     * )
+     */
+     public function removeAvatar($request, $response, $args) {
+        $user = elgg_get_logged_in_user_entity();
+
+        if (!$user) {
+            throw new Exception("could_not_find_user");
+        }
+
+        $icon_sizes = elgg_get_config('icon_sizes');
+        foreach ($icon_sizes as $name => $size_info) {
+            $file = new \ElggFile();
+            $file->owner_guid = $user->guid;
+            $file->setFilename("profile/{$user->guid}{$name}.jpg");
+            $filepath = $file->getFilenameOnFilestore();
+            if (!$file->delete()) {
+                elgg_log("Avatar file remove failed. Remove $filepath manually, please.", 'WARNING');
+            }
+        }
+
+        // Remove crop coords
+        unset($user->x1);
+        unset($user->x2);
+        unset($user->y1);
+        unset($user->y2);
+
+        // Remove icon
+        unset($user->icontime);
+
+        $json = [ 'success' => true ];
+        return $response->write(json_encode($json, JSON_PRETTY_PRINT));
+     }
+
+    /**
+     * @SWG\Post(
      *     path="/api/users/me/generate_token",
      *     security={{"oauth2": {"all"}}},
      *     tags={"user"},

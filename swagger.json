@@ -732,6 +732,54 @@
                 ]
             }
         },
+        "/api/users/me/change_avatar": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Change the avatar for the user.",
+                "description": "Change the avatar for the user.",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesful operation."
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "all"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/api/users/me/remove_avatar": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Remove the avatar for the user.",
+                "description": "Remove the avatar for the user.",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesful operation."
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "all"
+                        ]
+                    }
+                ]
+            }
+        },
         "/api/users/me/generate_token": {
             "post": {
                 "tags": [

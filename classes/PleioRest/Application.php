@@ -103,6 +103,8 @@ class Application {
         $app->post('/oauth/v2/token', 'PleioRest\Controllers\Authentication::getToken');
 
         $app->get('/api/users/me', 'PleioRest\Controllers\User:me');
+        $app->post('/api/users/me/change_avatar', 'PleioRest\Controllers\User:changeAvatar');
+        $app->post('/api/users/me/remove_avatar', 'PleioRest\Controllers\User:removeAvatar');
         $app->post('/api/users/me/register_push', 'PleioRest\Controllers\User:registerPush');
         $app->post('/api/users/me/deregister_push', 'PleioRest\Controllers\User:deregisterPush');
         $app->post('/api/users/me/generate_token', 'PleioRest\Controllers\User:generateToken');
