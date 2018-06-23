@@ -25,6 +25,12 @@ class User {
             throw new Exception("Could not find the logged in user.");
         }
 
+        if (function_exists("subsite_manager_is_superadmin_logged_in")) {
+            $isAdmin = subsite_manager_is_superadmin_logged_in();
+        } else {
+            $isAdmin = $user->isAdmin();
+        }
+
         $json = array(
             "guid" => $user->guid,
             "username" => $user->username,
@@ -33,7 +39,7 @@ class User {
             "icon" => "{$site->url}/mod/profile/icondirect.php?guid={$user->guid}&joindate={$user->time_created}",
             "url" => $user->getURL(),
             "language" => $user->language,
-            "isAdmin" => subsite_manager_is_superadmin_logged_in()
+            "isAdmin" => $isAdmin
         );
 
         $response = $response->withHeader("Content-type", "application/json");
