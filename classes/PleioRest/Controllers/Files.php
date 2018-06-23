@@ -4,14 +4,14 @@ namespace PleioRest\Controllers;
 class Files {
     /**
      * @SWG\Get(
-     *     path="/api/groups/{guid}/files",
+     *     path="/api/groups/{group_guid}/files",
      *     security={{"oauth2": {"all"}}},
      *     tags={"files"},
      *     summary="Find files and folders in a specific group.",
      *     description="Find files and folders from a specific group.",
      *     produces={"application/json"},
      *     @SWG\Parameter(
-     *         name="guid",
+     *         name="group_guid",
      *         in="path",
      *         description="The guid of the specific group",
      *         required=true,
@@ -145,6 +145,88 @@ class Files {
             'entities' => $entities
         ), JSON_PRETTY_PRINT));
     }
+
+    /**
+     * @SWG\Post(
+     *     path="/api/groups/{group_guid}/files",
+     *     security={{"oauth2": {"all"}}},
+     *     tags={"files"},
+     *     summary="Create a new file or folder in a specific group.",
+     *     description="Create a new file or folder in a specific group.",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         name="group_guid",
+     *         in="path",
+     *         description="The guid of the specific group",
+     *         required=true,
+     *         type="integer",
+     *         @SWG\Items(type="integer")
+     *     ),
+     *     @SWG\Parameter(
+     *         name="container_guid",
+     *         in="query",
+     *         description="Create the new element in a subfolder with this guid",
+     *         default=0,
+     *         required=false,
+     *         type="integer",
+     *         @SWG\Items(type="integer")
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Succesful operation.",
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="Could not find the requested group or subfolder.",
+     *     ),
+     *     @SWG\Response(
+     *         response=403,
+     *         description="Could not create file or folder due to restricted permissions.",
+     *     )
+     * )
+     */
+    function postGroup($request, $response, $args) {
+
+    }
+
+    /**
+     * @SWG\Delete(
+     *     path="/api/groups/{group_guid}/files",
+     *     security={{"oauth2": {"all"}}},
+     *     tags={"files"},
+     *     summary="Remove a specific file or folder in a group.",
+     *     description="Remove a specific file or folder in a group.",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         name="group_guid",
+     *         in="path",
+     *         description="The guid of the specific group",
+     *         required=true,
+     *         type="integer",
+     *         @SWG\Items(type="integer")
+     *     ),
+     *     @SWG\Parameter(
+     *         name="guid",
+     *         in="query",
+     *         description="The guid of the object to be deleted",
+     *         required=true,
+     *         type="integer",
+     *         @SWG\Items(type="integer")
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Succesful operation.",
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="Could not find the group or item.",
+     *     ),
+     *     @SWG\Response(
+     *         response=403,
+     *         description="Could not delete file or folder due to restricted permissions.",
+     *     )
+     * )
+     */
 
     /**
      * @SWG\Definition(

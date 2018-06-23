@@ -67,7 +67,7 @@ class Application {
     public function run() {
         $configuration = [
             'settings' => [
-                'displayErrorDetails' => false,
+                'displayErrorDetails' => true,
             ],
         ];
 
@@ -84,17 +84,17 @@ class Application {
             };
         };
 
-        $c['errorHandler'] = function($c) {
+        /*$c['errorHandler'] = function($c) {
             return function ($request, $response) use ($c) {
                 return $c['response']->withStatus(500)
                                      ->withHeader('Content-type', 'application/json')
                                      ->write(json_encode(array(
-                                        'status' => 404,
+                                        'status' => 500,
                                         'error' => 'internal_error',
                                         'pretty_error' => 'An internal error has occured, please contact the site administrator.'
                                     ), JSON_PRETTY_PRINT));
             };
-        };
+        };*/
 
         $app = new \Slim\App($c);
         $app->add(new AuthenticationMiddleware());
@@ -103,6 +103,8 @@ class Application {
         $app->post('/oauth/v2/token', 'PleioRest\Controllers\Authentication::getToken');
 
         $app->get('/api/users/me', 'PleioRest\Controllers\User:me');
+        $app->post('/api/users/me/change_avatar', 'PleioRest\Controllers\User:changeAvatar');
+        $app->post('/api/users/me/remove_avatar', 'PleioRest\Controllers\User:removeAvatar');
         $app->post('/api/users/me/register_push', 'PleioRest\Controllers\User:registerPush');
         $app->post('/api/users/me/deregister_push', 'PleioRest\Controllers\User:deregisterPush');
         $app->post('/api/users/me/generate_token', 'PleioRest\Controllers\User:generateToken');

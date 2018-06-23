@@ -162,7 +162,7 @@ class Activities {
             'subject' => array(
                 'guid' => $activity->subject_guid,
                 'name' => html_entity_decode($subject->name, ENT_QUOTES),
-                'icon_url' => $subject->getIconURL()
+                'icon_url' => $subject->getIconURL() . "&activity_id=" . $activity->id
             ),
             'action_type' => $activity->action_type,
             'object' => array(
