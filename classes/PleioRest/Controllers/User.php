@@ -4,7 +4,7 @@ namespace PleioRest\Controllers;
 class User {
 
     /**
-     * @SWG\Post(
+     * @SWG\Get(
      *     path="/api/users/me",
      *     security={{"oauth2": {"all"}}},
      *     tags={"user"},
@@ -145,6 +145,145 @@ class User {
         $json = [ 'success' => true ];
         return $response->write(json_encode($json, JSON_PRETTY_PRINT));
      }
+
+    /**
+     * @SWG\Post(
+     *     path="/api/users/me/change_name",
+     *     security={{"oauth2": {"all"}}},
+     *     tags={"user"},
+     *     summary="Change the name for the user.",
+     *     description="Change the name for the user.",
+     *     produces={"application/json"},
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Succesful operation."
+     *     )
+     * )
+     */
+    public function changeName($request, $response, $args) {
+        $user = elgg_get_logged_in_user_entity();
+        $user->name = get_input("name");
+        $user->save();
+
+        $json = [ 'success' => true ];
+        return $response->write(json_encode($json, JSON_PRETTY_PRINT));
+    }
+
+    /**
+     * @SWG\Post(
+     *     path="/api/users/me/change_email",
+     *     security={{"oauth2": {"all"}}},
+     *     tags={"user"},
+     *     summary="Change the email for the user.",
+     *     description="Change the email for the user.",
+     *     produces={"application/json"},
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Succesful operation."
+     *     )
+     * )
+     */
+    public function changeEmail($request, $response, $args) {
+        $user = elgg_get_logged_in_user_entity();
+
+        if (!$user) {
+            throw new Exception("could_not_find_user");
+        }
+
+        $email = trim(get_input("email"));
+        if (!is_email_address($email)) {
+            $json = [
+                'success' => false,
+                'message' => 'invalid_email'
+            ];
+            return $response->write(json_encode($json, JSON_PRETTY_PRINT));
+        }
+
+        if (get_user_by_email($email)) {
+            $json = [
+                'success' => false,
+                'message' => 'email_already_in_use'
+            ];
+            return $response->write(json_encode($json, JSON_PRETTY_PRINT));
+        }
+
+        set_input("guid", $user->guid);
+        set_input("email", $email);
+        security_tools_prepare_email_change();
+
+        $json = [ 'success' => true ];
+        return $response->write(json_encode($json, JSON_PRETTY_PRINT));
+    }
+
+    /**
+     * @SWG\Post(
+     *     path="/api/users/me/change_password",
+     *     security={{"oauth2": {"all"}}},
+     *     tags={"user"},
+     *     summary="Change the password for the user.",
+     *     description="Change the password for the user.",
+     *     produces={"application/json"},
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Succesful operation."
+     *     )
+     * )
+     */
+    public function changePassword($request, $response, $args) {
+        $user = elgg_get_logged_in_user_entity();
+
+        if (!$user) {
+            throw new Exception("could_not_find_user");
+        }
+
+        $old_password = get_input("old_password");
+        $new_password = get_input("new_password");
+
+        if (!$old_password) {
+            $json = [
+                'success' => false,
+                'message' => 'invalid_old_password'
+            ];
+            return $response->write(json_encode($json, JSON_PRETTY_PRINT));
+        }
+
+        $credentials = [
+            'username' => $user->username,
+            'password' => $old_password
+        ];
+
+        try {
+            pam_auth_userpass($credentials);
+        } catch (\LoginException $e) {
+            $json = [
+                'success' => false,
+                'message' => 'invalid_old_password'
+            ];
+            return $response->write(json_encode($json, JSON_PRETTY_PRINT));
+        }
+
+        try {
+			$result = validate_password($new_password);
+		} catch (\RegistrationException $e) {
+            $json = [
+                'success' => false,
+                'message' => 'invalid_new_password'
+            ];
+			return $response->write(json_encode($json, JSON_PRETTY_PRINT));
+        }
+
+        if ($result) {
+            $user->setPassword($new_password);
+            $json = [ 'success' => true ];
+            return $response->write(json_encode($json, JSON_PRETTY_PRINT));
+        } else {
+            $json = [
+                'success' => false,
+                'message' => 'could_not_save'
+            ];
+            return $response->write(json_encode($json, JSON_PRETTY_PRINT));
+        }
+    }
 
     /**
      * @SWG\Post(

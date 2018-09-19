@@ -105,6 +105,9 @@ class Application {
         $app->get('/api/users/me', 'PleioRest\Controllers\User:me');
         $app->post('/api/users/me/change_avatar', 'PleioRest\Controllers\User:changeAvatar');
         $app->post('/api/users/me/remove_avatar', 'PleioRest\Controllers\User:removeAvatar');
+        $app->post('/api/users/me/change_name', 'PleioRest\Controllers\User:changeName');
+        $app->post('/api/users/me/change_email', 'PleioRest\Controllers\User:changeEmail');
+        $app->post('/api/users/me/change_password', 'PleioRest\Controllers\User:changePassword');
         $app->post('/api/users/me/register_push', 'PleioRest\Controllers\User:registerPush');
         $app->post('/api/users/me/deregister_push', 'PleioRest\Controllers\User:deregisterPush');
         $app->post('/api/users/me/generate_token', 'PleioRest\Controllers\User:generateToken');
