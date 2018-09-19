@@ -5,15 +5,9 @@ class Authentication {
 
     public function authorize($request, $response, $args) {
         global $CONFIG;
-        if ($CONFIG->pleio) {
-            return $response->wihStatus(404)->write(json_encode([
-                "pretty_message" => "Could not find endpoint"
-            ]));
-        }
 
         $method = get_input("method");
         $idp = get_input("idp");
-
 
         $factory = new \PleioRest\AuthenticationServerFactory();
         $server = $factory->getServer();
@@ -240,11 +234,6 @@ class Authentication {
      */
     public function getToken($request, $response, $args) {
         global $CONFIG;
-        if ($CONFIG->pleio) {
-            return $response->wihStatus(404)->write(json_encode([
-                "pretty_message" => "Could not find endpoint"
-            ]));
-        }
 
         $factory = new \PleioRest\AuthenticationServerFactory();
         $server = $factory->getServer();

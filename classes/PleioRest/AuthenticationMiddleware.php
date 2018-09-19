@@ -19,42 +19,18 @@ class AuthenticationMiddleware {
         $factory = new AuthenticationServerFactory();
         $server = $factory->getServer();
 
-        global $CONFIG;
-        if ($CONFIG->pleio) {
-            $client = new \GuzzleHttp\Client();
-
-            try {
-                $res = $client->request('GET', $CONFIG->pleio->url . "/api/users/me", [
-                    "headers" => [
-                        "Authorization" => $request->getHeader("Authorization")[0]
-                    ]
-                ]);
-
-                $data = json_decode($res->getBody());
-                $user = get_user_by_username($data->guid);
-            } catch (\GuzzleHttp\Exception\ClientException $e) {
-                $response = $response->withStatus(403);
-                $response = $response->withHeader('Content-type', 'application/json');
-                return $response->write(json_encode(array(
-                    'status' => 403,
-                    'error' => 'invalid_access_token',
-                    'pretty_error' => 'You did not supply an OAuth access token or the token is invalid.'
-                ), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));                
-            }
-                    } else {
-            if (!$server->verifyResourceRequest(\OAuth2\Request::createFromGlobals())) {
-                $response = $response->withStatus(403);
-                $response = $response->withHeader('Content-type', 'application/json');
-                return $response->write(json_encode(array(
-                    'status' => 403,
-                    'error' => 'invalid_access_token',
-                    'pretty_error' => 'You did not supply an OAuth access token or the token is invalid.'
-                ), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-            }
-
-            $token = $server->getAccessTokenData(\OAuth2\Request::createFromGlobals());
-            $user = get_user($token['user_id']);
+        if (!$server->verifyResourceRequest(\OAuth2\Request::createFromGlobals())) {
+            $response = $response->withStatus(403);
+            $response = $response->withHeader('Content-type', 'application/json');
+            return $response->write(json_encode(array(
+                'status' => 403,
+                'error' => 'invalid_access_token',
+                'pretty_error' => 'You did not supply an OAuth access token or the token is invalid.'
+            ), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         }
+
+        $token = $server->getAccessTokenData(\OAuth2\Request::createFromGlobals());
+        $user = get_user($token['user_id']);
 
         if (!$user) {
             $response = $response->withStatus(403);

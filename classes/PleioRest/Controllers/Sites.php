@@ -47,6 +47,13 @@ class Sites {
         $params = $request->getQueryParams();
         $current_user = elgg_get_logged_in_user_entity();
 
+        if (!function_exists("subsite_manager_get_user_subsites")) {
+            return [
+                'total' => 0,
+                'entities' => []
+            ];
+        }
+
         $entities = array();
         foreach (subsite_manager_get_user_subsites($current_user->guid) as $entity) {
             if (pleio_rest_subsite_plugin_enabled($entity)) {
