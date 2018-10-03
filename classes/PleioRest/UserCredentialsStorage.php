@@ -82,7 +82,7 @@ class UserCredentialsStorage implements UserCredentialsInterface {
     }
 
     public function loginThroughElgg($login, $password) {
-        $user = $this->getUserElgg($login, $password);
+        $user = $this->getUserElgg($login);
 
         // a typesafe comparisson is very important as elgg_authenticate returns true or string.
         if ($user && elgg_authenticate($user->username, $password) === true) {
@@ -92,12 +92,14 @@ class UserCredentialsStorage implements UserCredentialsInterface {
         }
     }
 
-    public function getUserElgg($login, $password) {
+    public function getUserElgg($login) {
         if (strpos($login, '@') !== false) {
             $users = get_user_by_email($login);
             $user = $users[0];
         } else {
             $user = get_user_by_username($login);
         }
+
+        return $user;
     }
 }
